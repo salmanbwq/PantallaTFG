@@ -1,4 +1,4 @@
-# Install script for directory: /home/salman/Escritorio/TFG/LVGL9/managed_components/atanisoft__esp_lcd_touch_xpt2046
+# Install script for directory: /home/salman/CLionProjects/PantallaTFG1/managed_components/atanisoft__esp_lcd_touch_xpt2046
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

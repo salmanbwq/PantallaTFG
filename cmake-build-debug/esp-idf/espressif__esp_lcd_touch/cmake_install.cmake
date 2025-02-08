@@ -1,4 +1,4 @@
-# Install script for directory: /home/salman/Escritorio/TFG/LVGL9/managed_components/espressif__esp_lcd_touch
+# Install script for directory: /home/salman/CLionProjects/PantallaTFG1/managed_components/espressif__esp_lcd_touch
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

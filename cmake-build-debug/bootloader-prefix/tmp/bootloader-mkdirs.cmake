@@ -10,18 +10,18 @@ if(NOT EXISTS "/home/salman/esp/v5.3.1/esp-idf/components/bootloader/subproject"
   file(MAKE_DIRECTORY "/home/salman/esp/v5.3.1/esp-idf/components/bootloader/subproject")
 endif()
 file(MAKE_DIRECTORY
-  "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader"
-  "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader-prefix"
-  "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader-prefix/tmp"
-  "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader-prefix/src/bootloader-stamp"
-  "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader-prefix/src"
-  "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader-prefix/src/bootloader-stamp"
+  "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader"
+  "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader-prefix"
+  "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader-prefix/tmp"
+  "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader-prefix/src/bootloader-stamp"
+  "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader-prefix/src"
+  "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/home/salman/Escritorio/TFG/LVGL9/cmake-build-debug/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "/home/salman/CLionProjects/PantallaTFG1/cmake-build-debug/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

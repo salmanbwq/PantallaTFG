@@ -1,4 +1,4 @@
-# Install script for directory: /home/salman/Escritorio/TFG/LVGL9/main
+# Install script for directory: /home/salman/CLionProjects/PantallaTFG1/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
