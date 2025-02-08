@@ -1,6 +1,0 @@
-source "/home/salman/esp/v5.3.1/esp-idf/components/bootloader/Kconfig.projbuild"
-source "/home/salman/esp/v5.3.1/esp-idf/components/esp_app_format/Kconfig.projbuild"
-source "/home/salman/esp/v5.3.1/esp-idf/components/esp_rom/Kconfig.projbuild"
-source "/home/salman/esp/v5.3.1/esp-idf/components/esptool_py/Kconfig.projbuild"
-source "/home/salman/esp/v5.3.1/esp-idf/components/partition_table/Kconfig.projbuild"
-source "/home/salman/CLionProjects/PantallaTFG1/managed_components/atanisoft__esp_lcd_touch_xpt2046/Kconfig.projbuild"
