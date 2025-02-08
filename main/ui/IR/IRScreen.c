@@ -1,0 +1,53 @@
+//
+// Created by salman on 24/11/24.
+//
+#include <string.h>
+#include "lvgl.h"
+#include "IRScreen.h"
+
+#include <esp_log.h>
+#include <ui/MainScreen.h>
+#include <ui/GeneralObjects/InterfacesUtils.h>
+#include <ui/GeneralObjects/Keyboard.h>
+#include <ui/RFID/ReceiveRfidScreen.h>
+
+#include "ReceiveIRScreen.h"
+#include "SendIrScreen.h"
+
+void goToIRScreen(lv_indev_t *indev) {
+    deletePreviousScreen(irScrn);
+    ESP_LOGI("IRScreen", "Going to IR Screen");
+    irScreen();
+    lv_scr_load(irScrn);
+}
+
+static void irScreen() {
+    // Create screen2
+    irScrn = lv_obj_create(NULL); // Create the second screen
+    lv_obj_t *sendIR = lv_btn_create(irScrn);
+    lv_obj_t *recvIR = lv_btn_create(irScrn);
+    lv_obj_t *rtrn = lv_btn_create(irScrn);
+
+    lv_obj_set_size(sendIR, 150, 50);
+    lv_obj_set_pos(sendIR, 75, 30);
+    lv_obj_t *sendIRlb = lv_label_create(sendIR);
+    lv_label_set_text(sendIRlb, "Send IR");
+    lv_obj_center(sendIRlb);
+    lv_obj_add_event_cb(sendIR, goToIrSend, LV_EVENT_CLICKED, NULL);
+
+
+    lv_obj_set_size(recvIR, 150, 50);
+    lv_obj_set_pos(recvIR, 75, 100);
+    lv_obj_t *recvIRlb = lv_label_create(recvIR);
+    lv_label_set_text(recvIRlb, "Receive IR");
+    lv_obj_center(recvIRlb);
+    lv_obj_add_event_cb(recvIR, goToReceiveIrScreen, LV_EVENT_CLICKED, NULL);
+
+    lv_obj_set_size(rtrn, 150, 50);
+    lv_obj_set_pos(rtrn, 75, 170);
+    lv_obj_t *rtrnlb = lv_label_create(rtrn);
+    lv_label_set_text(rtrnlb, "Return");
+    lv_obj_center(rtrnlb);
+    lv_obj_set_style_bg_color(rtrn, lv_color_hex(0xff0000), 0);
+    lv_obj_add_event_cb(rtrn, goToMainScreen, LV_EVENT_CLICKED, NULL);
+}
