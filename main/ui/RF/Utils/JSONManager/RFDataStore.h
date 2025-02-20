@@ -23,6 +23,8 @@ typedef struct {
 
 static DeviceRF devicesRf[MAX_DEVICES];
 
+void init_spiffs();
+
 
 void saveRfDispositives(lv_event_t *indev);
 #endif //RFDATASTORE_H

@@ -7,12 +7,12 @@
 #include <esp_system.h>
 #include <esp_log.h>
 #include <esp_err.h>
-#include <lvgl.h>
 #include <esp_lvgl_port.h>
-#include <esp_mac.h>
 #include <esp_now.h>
 #include <string.h>
+#include <display/lv_display.h>
 #include <ui/MainScreen.h>
+#include <ui/UILibs/CJSONStorage/JSONManager.h>
 
 #include "ESPNOW/espNow.h"
 
@@ -22,15 +22,22 @@
 static const char *TAG = "demo";
 
 
-static void receive(const esp_now_recv_info_t *esp_now_info, const uint8_t *data, int data_len) {
-    printf("Recibiendo \n");
-    ESP_LOGI("ESP_RECV", "Data recibida desde " MACSTR ": %.*s", MAC2STR(esp_now_info->src_addr), data_len,
-             (const char *)data);
-    char received_data[50];
-    strncpy(received_data, (const char *) data, sizeof(received_data) - 1);
-    received_data[sizeof(received_data) - 1] = '\0';
-    const char *command = strtok(received_data, "/");
+#define FILE_PATH "/spiffs/rf_devices.json"
+
+void print_json_from_spiffs() {
+    FILE *file = fopen(FILE_PATH, "r");
+    if (!file) {
+        ESP_LOGE("SPIFFS", "No se pudo abrir el archivo JSON");
+        return;
+    }
+
+    char buffer[1024]; // Ajusta el tamaño si es necesario
+    fread(buffer, 1, sizeof(buffer), file);
+    fclose(file);
+
+    ESP_LOGI("SPIFFS", "Contenido del JSON:\n%s", buffer);
 }
+
 
 void app_main(void) {
     esp_lcd_panel_io_handle_t lcd_io;
@@ -61,7 +68,8 @@ void app_main(void) {
     ESP_ERROR_CHECK(init_esp_now(receive));
     ESP_ERROR_CHECK(register_peer(lcd));
 
-
+    init_spiffs();
+    print_json_from_spiffs();
     mainScreenInit();
 
     while (42) {

@@ -13,14 +13,17 @@
 #include <nvs_flash.h>
 #include <string.h>
 
+
 //  ADDR ESP32
 static uint8_t peer_mac[ESP_NOW_ETH_ALEN] = {0x40, 0x22, 0xd8, 0x1e, 0x6c, 0x9c};
 
 //  ADDR LCD
 //static uint8_t peer_mac[ESP_NOW_ETH_ALEN] = {0x24, 0xdc, 0xc3, 0x49, 0x5e, 0x10};
+static bool received = false;
+static bool sent = false;
+static esp_err_t result = ESP_OK;
 
-
- esp_err_t init_wifi(void) {
+esp_err_t init_wifi(void) {
     wifi_init_config_t wifi_init_config = WIFI_INIT_CONFIG_DEFAULT();
 
     esp_netif_init();
@@ -41,12 +44,16 @@ void recv_cb(const esp_now_recv_info_t *esp_now_info, const uint8_t *data, int d
 void send_cb(const uint8_t *mac_addr, esp_now_send_status_t status) {
     if (status == ESP_NOW_SEND_SUCCESS) {
         ESP_LOGI("ESP_SEND", "ESP_NOW_SEND_SUCCESS");
+        sent = true;
+        result = ESP_OK;
     } else {
         ESP_LOGI("ESP_SEND", "ESP_NOW_SEND_FAIL");
+        sent = true;
+        result = ESP_FAIL;
     }
 }
 
- esp_err_t init_esp_now(esp_now_recv_cb_t recv) {
+esp_err_t init_esp_now(esp_now_recv_cb_t recv) {
     esp_now_init();
     esp_now_register_recv_cb(recv);
     esp_now_register_send_cb(send_cb);
@@ -55,7 +62,7 @@ void send_cb(const uint8_t *mac_addr, esp_now_send_status_t status) {
     return ESP_OK;
 }
 
- esp_err_t register_peer(uint8_t *peer_addr) {
+esp_err_t register_peer(uint8_t *peer_addr) {
     esp_now_peer_info_t esp_now_peer_info = {};
     memcpy(esp_now_peer_info.peer_addr, peer_mac, ESP_NOW_ETH_ALEN);
     esp_now_peer_info.channel = ESP_CHANNEL;
@@ -64,7 +71,41 @@ void send_cb(const uint8_t *mac_addr, esp_now_send_status_t status) {
     return ESP_OK;
 }
 
- esp_err_t esp_now_send_data(const uint8_t *peer_addr, const uint8_t *data, size_t len) {
+esp_err_t esp_now_send_data(const uint8_t *peer_addr, const uint8_t *data, size_t len) {
     esp_now_send(peer_addr, data, len);
     return ESP_OK;
+}
+
+void receive(const esp_now_recv_info_t *esp_now_info, const uint8_t *data, int data_len) {
+    printf("Recibiendo \n");
+    ESP_LOGI("ESP_RECV", "Data recibida desde " MACSTR ": %.*s", MAC2STR(esp_now_info->src_addr), data_len,
+             (const char *)data);
+    int copy_len = data_len < BUFFER_SIZE - 1 ? data_len : BUFFER_SIZE - 1;
+    strncpy(bufferLectura, (const char *) data, copy_len);
+    bufferLectura[copy_len] = '\0'; // Asegurar terminación de string
+    ESP_LOGI("ESP_RECV", "Lectura: %s", bufferLectura);
+    received = true;
+}
+
+
+bool hasReceived() {
+    return received;
+}
+
+bool hasSent() {
+    return sent;
+}
+
+void initializeFlags() {
+    bufferLectura[0] = '\0';
+    received = false;
+    sent = false;
+}
+
+char *getBuffer() {
+    return bufferLectura;
+}
+
+esp_err_t getResult() {
+    return result;
 }

@@ -9,9 +9,11 @@
 #include "lvgl.h"
 #include "SendIrScreen.h"
 
-#include <ui/GeneralObjects/InterfacesUtils.h>
+#include <ui/CommonUI/InterfacesUtils.h>
 
 #include "SendTvIrScreen.h"
+
+static char selectedText[20];
 
 
 void goToIrSend(lv_indev_t *indev) {

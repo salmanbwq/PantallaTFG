@@ -7,18 +7,22 @@
 #include <stdio.h>
 #include <string.h>
 #include <ui/MainScreen.h>
-#include <ui/GeneralObjects/InterfacesUtils.h>
-#include <ui/GeneralObjects/Keyboard.h>
+#include <ui/CommonUI/InterfacesUtils.h>
+#include <ui/CommonUI/Keyboard.h>
+#include <ui/RF/Utils/JSONManager/RFDataStore.h>
 
 #include "AddRfDispScreen.h"
 #include "SettingsScreen.h"
-#include <ui/RF/RFDataStore.h>
 
 void goToAddRfDispScreen(lv_event_t *event) {
     deletePreviousScreen(addrfScreen);
     ESP_LOGI("Addrfdisp", "Going to AddRfDispScreen");
     addrfdispScreen();
     lv_scr_load(addrfScreen);
+}
+
+static void resetRFJSON(lv_event_t *event) {
+    remove("/spiffs/rf_devices.json");
 }
 
 
@@ -75,9 +79,20 @@ static void addrfdispScreen() {
     lv_obj_center(btn_label_back);
     lv_obj_add_event_cb(btn_back, goToSettings, LV_EVENT_CLICKED, NULL);
 
+    lv_obj_t *btn_del = lv_btn_create(addrfScreen);
+    lv_obj_set_size(btn_del, 80, 30); // Ajustar tamaño
+    lv_obj_set_style_bg_color(btn_del, lv_color_hex(0xff0000), 0);
+    lv_obj_align(btn_del, LV_ALIGN_BOTTOM_LEFT, 210, -50); // Posición en la esquina inferior derecha
+
+    lv_obj_t *btn_label_del = lv_label_create(btn_del);
+    lv_label_set_text(btn_label_del, "Borrar JSON RF");
+    lv_obj_center(btn_label_del);
+    lv_obj_add_event_cb(btn_del, resetRFJSON, LV_EVENT_CLICKED, NULL);
+
     lv_obj_t **widgets = malloc(2 * sizeof(lv_obj_t *));
     widgets[0] = dd_type;
     widgets[1] = ta_name;
+    widgets[2] = dd_freq;
 
     lv_obj_add_event_cb(btn_save, saveRfDispositives, LV_EVENT_CLICKED, widgets);
 }

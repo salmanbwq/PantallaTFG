@@ -3,7 +3,7 @@
 //
 
 #include <esp_log.h>
-#include <ui/GeneralObjects/InterfacesUtils.h>
+#include <ui/CommonUI/InterfacesUtils.h>
 
 #include "IRScreen.h"
 #include "lvgl.h"

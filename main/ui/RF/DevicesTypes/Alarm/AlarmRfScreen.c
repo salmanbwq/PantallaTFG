@@ -5,8 +5,7 @@
 #include "lvgl.h"
 #include "AlarmRfScreen.h"
 
-#include "ReceiveRfScreen.h"
-#include "SendRfScreen.h"
+#include <ui/RF/Send/SendRfScreen.h>
 
 void alarmRfScreen() {
     alarmRfScrn = lv_obj_create(NULL);

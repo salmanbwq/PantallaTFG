@@ -6,11 +6,13 @@
 
 #include <esp_log.h>
 #include <ui/MainScreen.h>
-#include <ui/GeneralObjects/InterfacesUtils.h>
+#include <ui/CommonUI/InterfacesUtils.h>
 
 #include "lvgl.h"
-#include "ReceiveRfScreen.h"
-#include "SendRfScreen.h"
+#include "Receive/ReceiveRfScreen.h"
+#include "Send/SendRfScreen.h"
+
+static lv_obj_t *rfScrn;
 
 void goToRfScreen(lv_event_t *event) {
     deletePreviousScreen(rfScrn);

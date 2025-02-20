@@ -14,6 +14,10 @@ static uint8_t peer_mac[ESP_NOW_ETH_ALEN];
 
 static uint8_t lcd[ESP_NOW_ETH_ALEN] = {0x40, 0x22, 0xd8, 0x1e, 0x6c, 0x9c};;
 
+#define BUFFER_SIZE 256 // Definir tamaño adecuado
+
+static char bufferLectura[BUFFER_SIZE]; // Definir el buffer correctamente
+
 /**
  * Function to initilize wifi module
  * @return ESP_OK
@@ -51,3 +55,16 @@ esp_err_t register_peer(uint8_t *peer_addr);
 
 
 esp_err_t esp_now_send_data(const uint8_t *peer_addr, const uint8_t *data, size_t len);
+
+
+void initializeFlags();
+
+bool hasSent();
+
+bool hasReceived();
+
+char *getBuffer();
+
+esp_err_t getResult();
+
+void receive(const esp_now_recv_info_t *esp_now_info, const uint8_t *data, int data_len);

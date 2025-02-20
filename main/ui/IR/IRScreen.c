@@ -6,9 +6,10 @@
 #include "IRScreen.h"
 
 #include <esp_log.h>
+#include <lvgl.h>
 #include <ui/MainScreen.h>
-#include <ui/GeneralObjects/InterfacesUtils.h>
-#include <ui/GeneralObjects/Keyboard.h>
+#include <ui/CommonUI/InterfacesUtils.h>
+#include <ui/CommonUI/Keyboard.h>
 #include <ui/RFID/ReceiveRfidScreen.h>
 
 #include "ReceiveIRScreen.h"

@@ -1,5 +1,6 @@
 idf_component_register(SRCS demo.c lcd.c touch.c "ui/MainScreen.c" "ui/RF/RfScreen.c" "ui/IR/IRScreen.c" "ui/IR/ReceiveIrScreen.c" "ui/IR/SendIrScreen.c" "ui/IR/SendTvIrScreen.c" "ui/RFID/RfidScreen.c" "ui/RFID/SendRfidScreen.c" "ui/RFID/ReceiveRfidScreen.c" "ui/Settings/AddRfidScreen.c"
-        "ui/Settings/AddrfdispScreen.c" "ui/RF/SendRfScreen.c" "ui/RF/ReceiveRfScreen.c" "ui/Settings/SettingsScreen.c" "ui/Settings/AddIrDispScreen.c" "ui/RF/GarageRfScreen.c" "ui/RF/LightRfScreen.c" "ui/RF/AlarmRfScreen.c" "ui/RF/sendRFBackend.c" "ui/RFID/sendRfidBackend.c"
-        "ui/RF/RFDataStore.c" "ESPNOW/espNow.c" "ui/GeneralObjects/Keyboard.c" "ui/GeneralObjects/InterfacesUtils.c"
+        "ui/Settings/AddrfdispScreen.c" "ui/RF/Send/SendRfScreen.c" "ui/RF/Receive/ReceiveRfScreen.c" "ui/Settings/SettingsScreen.c" "ui/Settings/AddIrDispScreen.c" "ui/RF/DevicesTypes/Garage/GarageRfScreen.c" "ui/RF/DevicesTypes/Light/LightRfScreen.c" "ui/RF/DevicesTypes/Alarm/AlarmRfScreen.c" "ui/RFID/sendRfidBackend.c"
+        "ui/RF/Utils/JSONManager/RFDataStore.c" "ESPNOW/espNow.c" "ui/CommonUI/Keyboard.c" "ui/CommonUI/InterfacesUtils.c" "ui/RF/Utils/JSONManager/RFDataRead.c" "ui/RFID/RfidDataStore.c" "ui/UILibs/CJSONStorage/JSONManager.c" "ui/UILibs/CJSONStorage/Write/WriteJson.c" "ui/UILibs/CJSONStorage/Read/ReadJson.c"
+        "ui/UILibs/Popup/Confirmation/ConfirmationPopup.c" "ui/UILibs/Popup/Loading/Loading.c" "ui/RFID/RFIDDataRead.c" "ui/RF/Utils/Dropdown/RFDropDown.c" "ui/RF/Utils/DispositiveSelectorType/DispositiveSelector.c"
         INCLUDE_DIRS "."
-        REQUIRES esp_lcd driver esp_wifi nvs_flash)
+        REQUIRES esp_lcd driver esp_wifi nvs_flash mqtt spiffs)

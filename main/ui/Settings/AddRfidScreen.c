@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <ui/MainScreen.h>
-#include <ui/GeneralObjects/InterfacesUtils.h>
-#include <ui/GeneralObjects/Keyboard.h>
+#include <ui/CommonUI/InterfacesUtils.h>
+#include <ui/CommonUI/Keyboard.h>
+#include <ui/RFID/RfidDataStore.h>
 
 #include "AddRfidDispScreen.h"
 #include "SettingsScreen.h"
 
-#include "cJSON/cJSON.h"
 
 static lv_obj_t *keyboard;
 
@@ -33,22 +33,16 @@ static void addrfiddispScreen() {
     lv_obj_set_style_bg_color(addRfidScreen, lv_color_hex(0xffffff), 0);
     lv_obj_set_style_bg_opa(addRfidScreen, LV_OPA_COVER, 0);
 
-    // Dropdown para el tipo de dispositivo
-    lv_obj_t *dd_type = lv_dropdown_create(addRfidScreen);
-    lv_dropdown_set_options(dd_type, "Sensor\nGarage\nLamp");
-    lv_obj_set_width(dd_type, 140);
-    lv_obj_align(dd_type, LV_ALIGN_TOP_LEFT, 20, 40);
-
     // Textarea para ingresar el nombre
     lv_obj_t *ta_name = lv_textarea_create(addRfidScreen);
     lv_textarea_set_placeholder_text(ta_name, "Nombre del dispositivo");
     lv_textarea_set_max_length(ta_name, 10);
     lv_obj_set_width(ta_name, 140);
     lv_obj_set_height(ta_name, 50);
-    lv_obj_align(ta_name, LV_ALIGN_TOP_LEFT, 20, 110);
+    lv_obj_align(ta_name, LV_ALIGN_TOP_LEFT, 20, 40);
     lv_obj_add_event_cb(ta_name, textAreaHandler, LV_EVENT_ALL, NULL);
 
-    createKeyboard(lv_scr_act());
+    createKeyboard(addRfidScreen);
 
     // Teclado virtual
     keyboard = lv_keyboard_create(addRfidScreen);
@@ -66,11 +60,10 @@ static void addrfiddispScreen() {
     lv_label_set_text(btn_label_save, "Guardar");
     lv_obj_center(btn_label_save);
 
-    lv_obj_t **widgets = malloc(2 * sizeof(lv_obj_t *));
-    widgets[0] = dd_type;
-    widgets[1] = ta_name;
+    lv_obj_t **widgets = malloc(1 * sizeof(lv_obj_t *));
+    widgets[0] = ta_name;
 
-    //lv_obj_add_event_cb(btn_save, saveRfidDispositives, LV_EVENT_CLICKED, widgets);
+    lv_obj_add_event_cb(btn_save, saveRFIDDispositives, LV_EVENT_CLICKED, widgets);
 
     // Botón para volver
     lv_obj_t *btn_back = lv_btn_create(addRfidScreen);

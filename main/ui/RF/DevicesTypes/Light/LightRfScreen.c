@@ -5,7 +5,8 @@
 #include "lvgl.h"
 #include "LightRfScreen.h"
 
-#include "SendRfScreen.h"
+#include <ui/RF/Send/SendRfScreen.h>
+
 
 void ligthRfScreen() {
     lightRfScrn = lv_obj_create(NULL);

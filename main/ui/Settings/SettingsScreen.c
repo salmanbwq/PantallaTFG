@@ -8,10 +8,11 @@
 #include "SettingsScreen.h"
 
 #include <esp_log.h>
-#include <ui/GeneralObjects/InterfacesUtils.h>
+#include <ui/CommonUI/InterfacesUtils.h>
 
 #include "AddIrDispScreen.h"
 #include "AddRfDispScreen.h"
+#include "AddRfidDispScreen.h"
 
 void goToSettings(lv_event_t *event) {
     deletePreviousScreen(settingsScrn);
@@ -43,7 +44,7 @@ void settingsScreen() {
     lv_obj_t *addRfidDispLbl = lv_label_create(addRfidDisp);
     lv_label_set_text(addRfidDispLbl, "Add Rfid dispositive");
     lv_obj_center(addRfidDispLbl);
-    lv_obj_add_event_cb(addRfidDisp, goToAddRfDispScreen, LV_EVENT_CLICKED, NULL);
+    lv_obj_add_event_cb(addRfidDisp, goToAddRfidScreen, LV_EVENT_CLICKED, NULL);
 
     lv_obj_set_size(addIrDisp, 150, 50);
     lv_obj_set_pos(addIrDisp, 75, 170);

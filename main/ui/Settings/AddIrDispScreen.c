@@ -5,8 +5,8 @@
 
 #include "lvgl.h"
 #include <stdio.h>
-#include <ui/GeneralObjects/InterfacesUtils.h>
-#include <ui/GeneralObjects/Keyboard.h>
+#include <ui/CommonUI/InterfacesUtils.h>
+#include <ui/CommonUI/Keyboard.h>
 
 #include "AddIrDispScreen.h"
 #include "SettingsScreen.h"
@@ -32,7 +32,7 @@ static void addIrDispScreen() {
     lv_obj_set_width(dd_type, 140); // Ajustar ancho
     lv_obj_align(dd_type, LV_ALIGN_TOP_LEFT, 20, 40); // Posición en la esquina superior izquierda
 
-    createKeyboard(lv_scr_act());
+    createKeyboard(addIrScreen);
 
     // Textarea para ingresar el nombre
     lv_obj_t *ta_name = lv_textarea_create(addIrScreen);
