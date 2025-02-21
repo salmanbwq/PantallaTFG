@@ -10,6 +10,7 @@
 #include <esp_spiffs.h>
 #include <ui/MainScreen.h>
 #include <ui/CommonUI/Keyboard.h>
+#include <ui/RF/Utils/DispositiveSelectorType/DispositiveSelector.h>
 #include <ui/UILibs/CJSONStorage/JSONManager.h>
 #include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
 
@@ -19,24 +20,44 @@
 static const char *TAG = "RFDataStore";
 
 
+static void createGarageObj(cJSON *json) {
+    cJSON *commands_array = cJSON_CreateArray();
+    cJSON *openCmd = cJSON_CreateObject();
+    cJSON *closeCmd = cJSON_CreateObject();
+    cJSON_AddStringToObject(openCmd, "name", "Open"); // Nombre del comando
+    cJSON_AddStringToObject(openCmd, "content", ""); // Contenido vacío por defecto
+    cJSON_AddStringToObject(closeCmd, "name", "Close");
+    cJSON_AddStringToObject(closeCmd, "content", "");
+    cJSON_AddItemToArray(commands_array, openCmd);
+    cJSON_AddItemToArray(commands_array, openCmd);
+    cJSON_AddItemToObject(json, "command", commands_array);
+}
+
 static cJSON *getJson(const char *name, const char *type, const char *freq) {
     cJSON *json = cJSON_CreateObject();
-    cJSON *commands_array = cJSON_CreateArray();
+    cJSON_AddStringToObject(json, "name", name);
+    cJSON_AddStringToObject(json, "freq", freq);
+    cJSON_AddStringToObject(json, "type", type);
 
-    // Inicializar con comandos vacíos
-    for (int i = 0; i < 4; i++) {
-        cJSON *cmd_obj = cJSON_CreateObject();
-        char commandName[20]; // Cadena con suficiente espacio
-        sprintf(commandName, "Command %d", i + 1);
-        cJSON_AddStringToObject(cmd_obj, "name", commandName); // Nombre del comando
-        cJSON_AddStringToObject(cmd_obj, "content", ""); // Contenido vacío por defecto
-        cJSON_AddItemToArray(commands_array, cmd_obj);
+    switch (get_command_type(type)) {
+        case Garage:
+            ESP_LOGI(TAG, "Creating new Garage Dispositive");
+            createGarageObj(json);
+            break;
+
+        case ALARM:
+            ESP_LOGI(TAG, "Creating new Alarm Dispositive");
+            cJSON_AddBoolToObject(json, "state", false);
+            break;
+
+        case LIGHT:
+            ESP_LOGI(TAG, "Creating new Light Dispositive");
+            cJSON_AddBoolToObject(json, "state", false);
+            break;
+
+        default: ESP_LOGE(TAG, "Unknown type");
     }
 
-    cJSON_AddStringToObject(json, "name", name);
-    cJSON_AddStringToObject(json, "RF", freq);
-    cJSON_AddStringToObject(json, "type", type);
-    cJSON_AddItemToObject(json, "command", commands_array);
 
     return json;
 }

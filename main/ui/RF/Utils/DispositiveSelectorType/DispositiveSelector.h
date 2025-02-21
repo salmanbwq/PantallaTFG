@@ -7,13 +7,15 @@
 #include <misc/lv_types.h>
 #include "ui/RF/Utils/Enums.h"
 
-
 typedef enum InstanceType {
     Garage,
     LIGHT,
     ALARM,
     UNKNOWN_COMMAND
 } InstanceType;
+InstanceType get_command_type(const char *command);
+
+
 
 void changeToDeviceTypeScreen(lv_event_t *event, const char *deviceType, const char *selectedText,
                               const DispositiveSelectorType type);

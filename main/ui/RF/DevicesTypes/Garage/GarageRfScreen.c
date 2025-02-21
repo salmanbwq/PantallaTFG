@@ -6,17 +6,23 @@
 #include "GarageRfScreen.h"
 
 #include <esp_log.h>
+#include <freertos/FreeRTOS.h>
+#include <FreeRTOSConfig.h>
+#include <portmacro.h>
 #include <string.h>
 #include <ESPNOW/espNow.h>
+#include <freertos/task.h>
 #include <sys/stat.h>
 #include <ui/CommonUI/InterfacesUtils.h>
 #include <ui/RF/Receive/ReceiveRfScreen.h>
 #include <ui/RF/Send/SendRfScreen.h>
 #include <ui/RF/Utils/DispositiveSelectorType/DispositiveSelector.h>
 #include <ui/RF/Utils/JSONManager/RFDataRead.h>
+#include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
 
 static const char *TAG = "GarageRfScreen";
 static lv_obj_t *garageRfScrn;
+static char instanceName[50];
 
 typedef enum Command {
     OPEN, CLOSE
@@ -37,27 +43,29 @@ void goToGarageScreen(lv_event_t *event, const char *name, const DispositiveSele
     lv_scr_load(garageRfScrn);
 }
 
+static void sendCommand(const char *commandName) {
+    char *commandStr = malloc(100 * sizeof(char));
+    strncpy(commandStr, getCommandsFromJSON(instanceName, commandName), sizeof(commandStr));
 
-static void sendCommandOpen(lv_event_t *event) {
-    CommandData *data = (CommandData *) lv_event_get_user_data(event);
-
-    if (data) {
-        uint8_t commandStr[100];
-        snprintf((char *) commandStr, sizeof(commandStr), "sendRF/%s/%s", data->command1, data->rf);
-
-        esp_now_send_data(lcd, commandStr, strlen((char *) commandStr));
+    if (strlen(commandStr) == 0) {
+        ESP_LOGI(TAG, "Command not found");
+        return;
     }
-}
 
-static void sendCommandClose(lv_event_t *event) {
-    CommandData *data = (CommandData *) lv_event_get_user_data(event);
+    esp_now_send_data(lcd, (uint8_t *) commandStr, strlen(commandStr));
 
-    if (data) {
-        uint8_t commandStr[100];
-        snprintf((char *) commandStr, sizeof(commandStr), "sendRF/%s/%s", data->command2, data->rf);
-
-        esp_now_send_data(lcd, commandStr, strlen((char *) commandStr));
+    if (!hasSent()) {
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
+
+    if (getResult() == ESP_OK) {
+        showConfirmationPopup(garageRfScrn, "Command was sent");
+    } else {
+        showConfirmationPopup(garageRfScrn, "Error sending command");
+        ESP_LOGE(TAG, "Command was not sent");
+    }
+
+    free(commandStr);
 }
 
 static void sendCommand(lv_event_t *event) {
@@ -65,11 +73,11 @@ static void sendCommand(lv_event_t *event) {
     switch (command) {
         case OPEN:
             ESP_LOGI(TAG, "Sending Open Command");
-            sendCommandOpen(event);
+            sendCommand("Open");
             break;
         case CLOSE:
             ESP_LOGI(TAG, "Sending Close Command");
-            sendCommandClose(event);
+            sendCommand("Close");
             break;
     }
 }
@@ -87,6 +95,7 @@ static void receiveCommand(lv_event_t *event) {
 }
 
 static void garageRfScreen(const char *name, const DispositiveSelectorType type) {
+    strcpy(instanceName, name);
     static Command open = OPEN;
     static Command close = CLOSE;
     // Crear la pantalla
@@ -99,13 +108,13 @@ static void garageRfScreen(const char *name, const DispositiveSelectorType type)
     lv_label_set_text_fmt(titleLabel, "%s", name); // Mostrar nombre e ID
     lv_obj_set_style_text_font(titleLabel, &lv_font_montserrat_14, 0);
     lv_obj_set_style_text_color(titleLabel, lv_color_hex(0x000000), 0);
-    lv_obj_align(titleLabel, LV_ALIGN_TOP_MID, 0, 5); // Margen superior pequeño
+    lv_obj_align(titleLabel, LV_ALIGN_TOP_MID, 0, 20); // Margen superior pequeño
 
     // Contenedor para los botones
     lv_obj_t *btnContainer = lv_obj_create(garageRfScrn);
-    lv_obj_set_size(btnContainer, 220, 160); // Ajustado para la pantalla horizontal
+    lv_obj_set_size(btnContainer, 140, 120); // Ajustado para la pantalla horizontal
     lv_obj_set_style_bg_opa(btnContainer, LV_OPA_0, 0); // Hacer transparente
-    lv_obj_align(btnContainer, LV_ALIGN_CENTER, 0, 10);
+    lv_obj_align(btnContainer, LV_ALIGN_CENTER, 0, -10);
 
     // Estilo de los botones
     static lv_style_t style_btn;
@@ -121,7 +130,7 @@ static void garageRfScreen(const char *name, const DispositiveSelectorType type)
     // Botón "Abrir" (arriba)
     lv_obj_t *btnOpen = lv_btn_create(btnContainer);
     lv_obj_add_style(btnOpen, &style_btn, 0);
-    lv_obj_set_size(btnOpen, 200, 60); // Botón ancho para facilidad de uso
+    lv_obj_set_size(btnOpen, 100, 40); // Botón ancho para facilidad de uso
     lv_obj_align(btnOpen, LV_ALIGN_TOP_MID, 0, 5);
     lv_obj_t *btnOpen_label = lv_label_create(btnOpen);
     lv_label_set_text(btnOpen_label, LV_SYMBOL_UP " ABRIR");
@@ -130,7 +139,7 @@ static void garageRfScreen(const char *name, const DispositiveSelectorType type)
     // Botón "Cerrar" (abajo)
     lv_obj_t *btnClose = lv_btn_create(btnContainer);
     lv_obj_add_style(btnClose, &style_btn, 0);
-    lv_obj_set_size(btnClose, 200, 60);
+    lv_obj_set_size(btnClose, 100, 40);
     lv_obj_align(btnClose, LV_ALIGN_BOTTOM_MID, 0, -5);
     lv_obj_t *btnClose_label = lv_label_create(btnClose);
     lv_label_set_text(btnClose_label, LV_SYMBOL_DOWN " CERRAR");
@@ -138,7 +147,7 @@ static void garageRfScreen(const char *name, const DispositiveSelectorType type)
 
     // Botón de "Volver" (abajo)
     lv_obj_t *rtrnbtn = lv_btn_create(garageRfScrn);
-    lv_obj_set_size(rtrnbtn, 200, 50);
+    lv_obj_set_size(rtrnbtn, 150, 40);
     lv_obj_align(rtrnbtn, LV_ALIGN_BOTTOM_MID, 0, -10);
     lv_obj_set_style_bg_color(rtrnbtn, lv_color_hex(0xFF0000), 0);
     lv_obj_set_style_radius(rtrnbtn, 10, 0);

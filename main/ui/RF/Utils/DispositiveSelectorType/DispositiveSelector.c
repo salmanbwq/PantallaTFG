@@ -15,7 +15,7 @@
 
 static const char *TAG = "DispositiveSelector";
 
-static InstanceType get_command_type(const char *command) {
+InstanceType get_command_type(const char *command) {
     if (strcmp(command, "Garage") == 0) return Garage;
     if (strcmp(command, "alarm") == 0) return ALARM;
     if (strcmp(command, "light") == 0) return LIGHT;

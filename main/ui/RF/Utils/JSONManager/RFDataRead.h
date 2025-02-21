@@ -18,7 +18,9 @@ char *getDeviceType(char *name);
 
 int getDeviceID(char *name);
 
-CommandData *getCommandsFromJSON(const char *id);
+char *getCommandsFromJSON(const char *name, const char *commanName);
+
+char *getDeviceRF(char *deviceName);
 
 
 #endif //RFDATAREAD_H
