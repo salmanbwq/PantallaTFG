@@ -134,6 +134,7 @@ static void updateDropDown(cJSON *file, lv_obj_t *dropdown) {
 
         lv_dropdown_add_option(dropdown, cmd_name, i);
     }
+    lv_obj_clear_state(dropdown, LV_STATE_DISABLED);
     ESP_LOGI(TAG, "Dropdown actualizado con %d dispositivos.", count);
     cJSON_Delete(file);
 }

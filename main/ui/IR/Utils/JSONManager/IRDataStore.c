@@ -1,70 +1,80 @@
 //
-// Created by salman on 8/02/25.
+// Created by salman on 21/02/25.
 //
 
-#include "RFDataStore.h"
-#include "cJSON/cJSON.h"
+#include "IRDataStore.h"
+
+#include <esp_err.h>
 #include <esp_log.h>
+#include "lvgl.h"
+#include <stdio.h>
 #include <string.h>
-#include <esp_spiffs.h>
-#include <ui/MainScreen.h>
-#include <ui/CommonUI/Keyboard.h>
-#include <ui/RF/Utils/DispositiveSelectorType/DispositiveSelector.h>
+#include <cJSON/cJSON.h>
+#include <ui/IR/Utils/DispositiveSelector/IRDispositiveSelector.h>
 #include <ui/UILibs/CJSONStorage/JSONManager.h>
 #include <ui/UILibs/CJSONStorage/Write/WriteJson.h>
 #include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
+static const char *TAG = "IRDataRead";
+static const char *FILE_PATH = "/spiffs/irDevices.json";
 
-#include "lvgl.h"
-#define FILE_PATH "/spiffs/rf_devices.json"
-
-static const char *TAG = "RFDataStore";
-
-
-static cJSON *createGarageObj() {
+static void createTVObj(cJSON *json) {
     cJSON *commands_array = cJSON_CreateArray();
-    cJSON *openCmd = cJSON_CreateObject();
-    cJSON *closeCmd = cJSON_CreateObject();
-    cJSON_AddStringToObject(openCmd, "name", "Open"); // Nombre del comando
-    cJSON_AddStringToObject(openCmd, "content", ""); // Contenido vacío por defecto
-    cJSON_AddStringToObject(closeCmd, "name", "Close");
-    cJSON_AddStringToObject(closeCmd, "content", "");
-    cJSON_AddItemToArray(commands_array, openCmd);
-    cJSON_AddItemToArray(commands_array, closeCmd);
-    ESP_LOGI(TAG, "Garage objects created");
-    return commands_array;
+
+    // Inicializar con comandos vacíos
+    for (int i = 0; i < 7; i++) {
+        cJSON *cmd_obj = cJSON_CreateObject();
+        char commandName[20]; // Cadena con suficiente espacio
+        sprintf(commandName, "Command %d", i + 1);
+        cJSON_AddStringToObject(cmd_obj, "name", commandName); // Nombre del comando
+        cJSON_AddStringToObject(cmd_obj, "content", ""); // Contenido vacío por defecto
+        cJSON_AddItemToArray(commands_array, cmd_obj);
+    }
+
+    cJSON_AddItemToObject(json, "command", commands_array);
 }
 
-static cJSON *getJson(const char *name, const char *type, const char *freq) {
+static void createACObj(cJSON *json) {
+    cJSON *commands_array = cJSON_CreateArray();
 
+    // Inicializar con comandos vacíos
+    for (int i = 0; i < 4; i++) {
+        cJSON *cmd_obj = cJSON_CreateObject();
+        char commandName[20]; // Cadena con suficiente espacio
+        sprintf(commandName, "Command %d", i + 1);
+        cJSON_AddStringToObject(cmd_obj, "name", commandName); // Nombre del comando
+        cJSON_AddStringToObject(cmd_obj, "content", ""); // Contenido vacío por defecto
+        cJSON_AddItemToArray(commands_array, cmd_obj);
+    }
+
+    cJSON_AddItemToObject(json, "command", commands_array);
+}
+
+static cJSON *getJson(const char *name, const char *type) {
     cJSON *json = cJSON_CreateObject();
     cJSON_AddStringToObject(json, "name", name);
-    cJSON_AddStringToObject(json, "freq", freq);
     cJSON_AddStringToObject(json, "type", type);
 
-    switch (get_command_type(type)) {
-        case Garage:
-            ESP_LOGI(TAG, "Creating new Garage Dispositive");
-            cJSON_AddItemToObject(json, "command", createGarageObj());
+    switch (getIRType(type)) {
+        case TV:
+            ESP_LOGI(TAG, "Creating new %s Dispositive", type);
+            createTVObj(json);
             break;
 
-        case ALARM:
-            ESP_LOGI(TAG, "Creating new Alarm Dispositive");
-            cJSON_AddBoolToObject(json, "state", false);
-            break;
-
-        case LIGHT:
-            ESP_LOGI(TAG, "Creating new Light Dispositive");
-            cJSON_AddBoolToObject(json, "state", false);
+        case A_C:
+            ESP_LOGI(TAG, "Creating new %s Dispositive", type);
+            createACObj(json);
             break;
 
         default: ESP_LOGE(TAG, "Unknown type");
+            return NULL;
     }
 
 
     return json;
 }
 
-void saveRfDispositives(lv_event_t *indev) {
+
+void saveIRDispositives(lv_event_t *indev) {
     lv_obj_t **widget = (lv_obj_t **) lv_event_get_user_data(indev);
     if (!widget) {
         ESP_LOGE("TAG", "User data is NULL");
@@ -73,23 +83,20 @@ void saveRfDispositives(lv_event_t *indev) {
 
     lv_obj_t *ta_name = widget[1];
     lv_obj_t *type = widget[0];
-    lv_obj_t *freq = widget[2];
 
-    if (!ta_name || !type || !freq) {
+    if (!ta_name || !type) {
         ESP_LOGE(TAG, "Input data is NULL");
         return;
     }
 
     char typeStr[50];
-    char freqStr[20];
     char ta_nameStr[100];
 
     strcpy(ta_nameStr, lv_textarea_get_text(ta_name));
     lv_dropdown_get_selected_str(type, typeStr, sizeof(typeStr));
-    lv_dropdown_get_selected_str(freq, freqStr, sizeof(freqStr));
 
-    if (strcmp(typeStr, "") != 0 && strcmp(freqStr, "") != 0 && strcmp(typeStr, "") != 0) {
-        cJSON *json = getJson(ta_nameStr, typeStr, freqStr);
+    if (strcmp(ta_nameStr, "") != 0 && strcmp(typeStr, "") != 0) {
+        cJSON *json = getJson(ta_nameStr, typeStr);
         if (!json) {
             ESP_LOGE(TAG, "JSON created is NULL");
             return;
@@ -104,7 +111,7 @@ void saveRfDispositives(lv_event_t *indev) {
     }
 }
 
-esp_err_t updateRFJSON(char *name, const char *commandName, char *content) {
+esp_err_t updateIRJSON(char *name, const char *commandName, char *content) {
     cJSON *file = getJsonByName(name, FILE_PATH);
     if (!file) {
         ESP_LOGE(TAG, "No se encontró el JSON para el nombre: %s", name);

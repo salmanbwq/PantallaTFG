@@ -49,6 +49,7 @@ void send_cb(const uint8_t *mac_addr, esp_now_send_status_t status) {
     } else {
         ESP_LOGI("ESP_SEND", "ESP_NOW_SEND_FAIL");
         sent = true;
+        received = true;
         result = ESP_FAIL;
     }
 }

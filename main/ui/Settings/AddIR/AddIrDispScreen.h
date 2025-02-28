@@ -13,7 +13,7 @@ static void addIrDispScreen();
 
 void goToAddIrDispScreen(lv_event_t *event);
 
-static lv_obj_t *addIrScreen;
+
 
 
 #endif //ADDDISPSCREEN_H

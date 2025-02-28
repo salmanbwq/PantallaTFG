@@ -10,27 +10,31 @@
 #include <esp_log.h>
 #include <ui/CommonUI/InterfacesUtils.h>
 
-#include "AddIrDispScreen.h"
-#include "AddRfDispScreen.h"
-#include "AddRfidDispScreen.h"
+#include "AddIR/AddIrDispScreen.h"
+#include "AddRF/AddRfDispScreen.h"
+#include "AddRFID/AddRfidDispScreen.h"
+#include "Reset/Reset.h"
+
+static lv_obj_t *settingInstance;
 
 void goToSettings(lv_event_t *event) {
-    deletePreviousScreen(settingsScrn);
+    deletePreviousScreen(settingInstance);
     ESP_LOGI("SettingsScreen", "Going to settings screen");
     settingsScreen();
-    lv_scr_load(settingsScrn);
+    lv_scr_load(settingInstance);
 }
 
 void settingsScreen() {
-    settingsScrn = lv_obj_create(NULL);
+    settingInstance = lv_obj_create(NULL);
 
-    lv_obj_t *addRfDisp = lv_btn_create(settingsScrn);
-    lv_obj_t *rtrnMain = lv_btn_create(settingsScrn);
-    lv_obj_t *addRfidDisp = lv_btn_create(settingsScrn);
-    lv_obj_t *addIrDisp = lv_btn_create(settingsScrn);
+    lv_obj_t *addRfDisp = lv_btn_create(settingInstance);
+    lv_obj_t *rtrnMain = lv_btn_create(settingInstance);
+    lv_obj_t *deleteJson = lv_btn_create(settingInstance);
+    lv_obj_t *addRfidDisp = lv_btn_create(settingInstance);
+    lv_obj_t *addIrDisp = lv_btn_create(settingInstance);
 
-    lv_obj_set_size(settingsScrn, 150, 50);
-    lv_obj_set_pos(settingsScrn, 75, 100);
+    lv_obj_set_size(settingInstance, 150, 50);
+    lv_obj_set_pos(settingInstance, 75, 100);
 
     lv_obj_set_size(addRfDisp, 150, 50);
     lv_obj_set_pos(addRfDisp, 75, 30);
@@ -53,9 +57,16 @@ void settingsScreen() {
     lv_obj_center(addIrDispLbl);
     lv_obj_add_event_cb(addIrDisp, goToAddIrDispScreen, LV_EVENT_CLICKED, NULL);
 
+    lv_obj_set_size(deleteJson, 150, 50);
+    lv_obj_set_pos(deleteJson, 75, 240);
+    lv_obj_set_style_bg_color(deleteJson, lv_color_hex(0xff0000), 0);
+    lv_obj_t *deleteJsonLbl = lv_label_create(deleteJson);
+    lv_label_set_text(deleteJsonLbl, "Delete Json");
+    lv_obj_center(deleteJsonLbl);
+    lv_obj_add_event_cb(deleteJson, goToResetScreen, LV_EVENT_CLICKED, NULL);
 
     lv_obj_set_size(rtrnMain, 150, 50);
-    lv_obj_set_pos(rtrnMain, 75, 240);
+    lv_obj_set_pos(rtrnMain, 75, 310);
     lv_obj_set_style_bg_color(rtrnMain, lv_color_hex(0xff0000), 0);
     lv_obj_t *rtrnMainLbl = lv_label_create(rtrnMain);
     lv_label_set_text(rtrnMainLbl, "Return");

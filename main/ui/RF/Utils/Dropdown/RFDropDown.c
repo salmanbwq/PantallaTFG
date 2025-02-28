@@ -17,12 +17,6 @@ static lv_obj_t *dropDwnHndlr;
 
 void dropdownEventHandlerRF(lv_event_t *event) {
     const DispositiveSelectorType type = *(DispositiveSelectorType *) lv_event_get_user_data(event);
-    switch (type) {
-        case SENDER:
-            ESP_LOGI(TAG, "SENDER");
-            break;
-        default: ;
-    }
     dropDwnHndlr = lv_event_get_target(event);
     if (lv_event_get_code(event) == LV_EVENT_VALUE_CHANGED) {
         lv_dropdown_get_selected_str(dropDwnHndlr, selectedText, sizeof(selectedText));
@@ -33,7 +27,7 @@ void dropdownEventHandlerRF(lv_event_t *event) {
 
         if (deviceType) {
             ESP_LOGI(TAG, "Se ha seleccionado: %s, Tipo: %s", selectedText, deviceType);
-            changeToDeviceTypeScreen(event, deviceType, selectedText, type);
+            changeToRFDeviceTypeScreen(deviceType, selectedText, type);
         } else {
             ESP_LOGE(TAG, "No se encontró el tipo de dispositivo en JSON.");
         }

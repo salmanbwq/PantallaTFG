@@ -13,12 +13,11 @@
 #include <ESPNOW/espNow.h>
 #include <freertos/task.h>
 #include <ui/CommonUI/InterfacesUtils.h>
+#include <ui/RFID/RfidScreen.h>
+#include <ui/RFID/Utils/JSONManager/RfidDataStore.h>
 #include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
 #include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
-#include <ui/UILibs/Popup/Loading/Loading.h>
 
-#include "RfidDataStore.h"
-#include "RfidScreen.h"
 #define FILE_PATH "/spiffs/rfidDevices.json"
 static const char *TAG = "ReceiveRfidScreen";
 
@@ -44,6 +43,11 @@ static void receiveRFIDData(lv_event_t *event) {
     lv_dropdown_get_selected_str(userData[0], commandName, sizeof(commandName));
     lv_dropdown_get_selected_str(userData[1], dispName, sizeof(dispName));
 
+    if (strlen(commandName) == 0 || strlen(dispName) == 0) {
+        ESP_LOGI(TAG, "Received empty command or dispositive name");
+        return;
+    }
+
 
     char *command = "receiveRfid/";
     esp_now_send_data(lcd, (uint8_t *) command, strlen(command) + 1);
@@ -58,14 +62,10 @@ static void receiveRFIDData(lv_event_t *event) {
     strcpy(receivedData, getBuffer());
     if (strlen(receivedData) == 0) {
         ESP_LOGE(TAG, "Received null or empty data");
+        showConfirmationPopup(receiverFidScreen, "Received null or empty data");
         return;
     }
 
-
-    if (strlen(dispName) == 0 || strlen(commandName) == 0) {
-        ESP_LOGE(TAG, "User data is invalid (empty values)");
-        return;
-    }
 
     ESP_LOGI(TAG, "Received: %s to be applied in dispositive %s, command %s",
              receivedData, dispName, commandName);
@@ -86,6 +86,9 @@ static void receiveRfidScreen(void) {
     lv_obj_t *ddDisp = lv_dropdown_create(receiverFidScreen);
     lv_obj_t *rtrnBtn = lv_btn_create(receiverFidScreen);
     lv_obj_t *rtrnBtnLbl = lv_label_create(rtrnBtn);
+    lv_dropdown_clear_options(ta_name);
+    lv_obj_add_state(ta_name, LV_STATE_DISABLED);
+
 
     lv_obj_t *sendBtn = lv_btn_create(receiverFidScreen);
     lv_obj_t *sendBtnLblL = lv_label_create(sendBtn);
@@ -93,6 +96,11 @@ static void receiveRfidScreen(void) {
     populateDropdownNames(ddDisp, FILE_PATH);
     lv_obj_set_pos(ddDisp, 20, 30);
     lv_obj_set_size(ddDisp, 165, 40);
+
+    if (lv_dropdown_get_option_count(ddDisp) == 0) {
+        showConfirmationPopup(receiverFidScreen, "Data empty");
+        lv_obj_add_state(ddDisp, LV_STATE_DISABLED);
+    }
 
 
     lv_obj_add_event_cb(ddDisp, populateDropdownCommands, LV_EVENT_ALL, ta_name);

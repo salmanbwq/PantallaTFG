@@ -9,6 +9,6 @@ void goToSettings(lv_event_t *event);
 
 void settingsScreen();
 
-static lv_obj_t *settingsScrn;
+
 
 #endif //SETTINGSSCREEN_H

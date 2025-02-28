@@ -5,9 +5,10 @@
 #ifndef RECEIVEIRSCREEN_H
 #define RECEIVEIRSCREEN_H
 
-static lv_obj_t *receiveIrScrn;
-
-void goToReceiveIrScreen(lv_indev_t *indev);
+/**
+ * Methods to change to Receive IR Screen
+ */
+void goToReceiveIrScreen();
 
 static void receiveIrScreen();
 

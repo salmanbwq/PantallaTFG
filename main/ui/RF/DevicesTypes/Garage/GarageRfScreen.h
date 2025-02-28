@@ -8,7 +8,7 @@
 
 
 
-void goToGarageScreen(lv_event_t *event, const char *name, const DispositiveSelectorType type);
+void goToGarageScreen(const char *name, const DispositiveSelectorType type);
 
 static void garageRfScreen(const char *name, const enum DispositiveSelectorType type);
 

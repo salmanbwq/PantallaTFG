@@ -13,10 +13,10 @@ typedef enum InstanceType {
     ALARM,
     UNKNOWN_COMMAND
 } InstanceType;
+
 InstanceType get_command_type(const char *command);
 
 
-
-void changeToDeviceTypeScreen(lv_event_t *event, const char *deviceType, const char *selectedText,
-                              const DispositiveSelectorType type);
+void changeToRFDeviceTypeScreen(const char *deviceType, const char *selectedText,
+                                const DispositiveSelectorType type);
 #endif //DISPOSITIVESELECTOR_H

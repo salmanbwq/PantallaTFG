@@ -5,8 +5,11 @@
 #ifndef IRSCREEN_H
 #define IRSCREEN_H
 #include "lvgl.h"
-static lv_obj_t *irScrn;
 
+/**
+ * Method to change to IR Screen
+ * @param indev Arguments passed by callback method
+ */
 void goToIRScreen(lv_indev_t *indev);
 
 static void irScreen();

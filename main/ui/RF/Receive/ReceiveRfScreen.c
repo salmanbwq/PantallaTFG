@@ -11,6 +11,7 @@
 #include <ui/RF/Utils/Enums.h>
 #include <ui/RF/Utils/Dropdown/RFDropDown.h>
 #include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
+#include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
 
 
 #define FILE_PATH "/spiffs/rf_devices.json"
@@ -43,6 +44,11 @@ static void receiveRfScreen(void) {
     lv_obj_set_pos(dd_type, 75, 30); // Posición en la esquina superior izquierda
     lv_obj_add_event_cb(dd_type, dropdownEventHandlerRF, LV_EVENT_VALUE_CHANGED, &dispositive_selector);
 
+
+    if (lv_dropdown_get_option_count(dd_type) == 0) {
+        showConfirmationPopup(receiveRfScrn, "Data empty");
+        lv_obj_add_state(dd_type, LV_STATE_DISABLED);
+    }
 
     lv_obj_set_size(rtrngrg, 150, 50);
     lv_obj_set_pos(rtrngrg, 75, 100);

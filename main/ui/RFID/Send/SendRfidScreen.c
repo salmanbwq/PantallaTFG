@@ -12,19 +12,18 @@
 #include <ESPNOW/espNow.h>
 #include <freertos/task.h>
 #include <ui/CommonUI/InterfacesUtils.h>
-#include <ui/IR/SendIrScreen.h>
+#include <ui/IR/Sender/SendIrScreen.h>
+#include <ui/RFID/RfidScreen.h>
+#include <ui/RFID/Utils/JSONManager/RFIDDataRead.h>
+#include <ui/RFID/Utils/JSONManager/RfidDataStore.h>
 #include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
 #include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
-
-#include "RFIDDataRead.h"
-#include "RfidDataStore.h"
-#include "RfidScreen.h"
 
 static char *FILE_PATH = "/spiffs/rfidDevices.json";
 static char *TAG = "SendRfidScreen";
 
 void goToSendRfidScreen(lv_event_t *event) {
-    deletePreviousScreen(sendIrScrn);
+    deletePreviousScreen(sendRfidScrn);
     ESP_LOGI("SendRfidScreen", "Going to send RfidScreen");
     sendRfidScreen();
     lv_scr_load(sendRfidScrn);
@@ -90,10 +89,17 @@ static void sendRfidScreen(void) {
 
     lv_obj_t *sendBtn = lv_btn_create(sendRfidScrn);
     lv_obj_t *sendBtnLblL = lv_label_create(sendBtn);
+    lv_dropdown_clear_options(ddCommand);
+    lv_obj_add_state(ddCommand, LV_STATE_DISABLED);
 
     populateDropdownNames(ddDisp, FILE_PATH);
     lv_obj_set_pos(ddDisp, 20, 30);
     lv_obj_set_size(ddDisp, 165, 40);
+
+    if (lv_dropdown_get_option_count(ddDisp) == 0) {
+        showConfirmationPopup(sendRfidScrn, "Data empty");
+        lv_obj_add_state(ddDisp, LV_STATE_DISABLED);
+    }
 
     lv_obj_add_event_cb(ddDisp, populateDropdownCommands, LV_EVENT_ALL, ddCommand);
 

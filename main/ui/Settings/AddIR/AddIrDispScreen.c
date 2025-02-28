@@ -9,7 +9,11 @@
 #include <ui/CommonUI/Keyboard.h>
 
 #include "AddIrDispScreen.h"
-#include "SettingsScreen.h"
+
+#include <ui/IR/Utils/JSONManager/IRDataStore.h>
+#include <ui/Settings/SettingsScreen.h>
+
+static lv_obj_t *addIrScreen;
 
 void goToAddIrDispScreen(lv_event_t *event) {
     deletePreviousScreen(addIrScreen);
@@ -28,7 +32,7 @@ static void addIrDispScreen() {
 
     // Dropdown para el tipo de dispositivo
     lv_obj_t *dd_type = lv_dropdown_create(addIrScreen);
-    lv_dropdown_set_options(dd_type, "Sensor\nGarage\nLamp");
+    lv_dropdown_set_options(dd_type, "TV\nA/C");
     lv_obj_set_width(dd_type, 140); // Ajustar ancho
     lv_obj_align(dd_type, LV_ALIGN_TOP_LEFT, 20, 40); // Posición en la esquina superior izquierda
 
@@ -50,9 +54,14 @@ static void addIrDispScreen() {
     lv_obj_set_style_bg_color(btn_save, lv_color_hex(0x00bb2d), 0);
     lv_obj_align(btn_save, LV_ALIGN_BOTTOM_LEFT, 210, -150); // Posición en la esquina inferior izquierda
 
+    lv_obj_t **widgets = malloc(2 * sizeof(lv_obj_t *));
+    widgets[0] = dd_type;
+    widgets[1] = ta_name;
+
     lv_obj_t *btn_label_save = lv_label_create(btn_save);
     lv_label_set_text(btn_label_save, "Guardar");
     lv_obj_center(btn_label_save);
+    lv_obj_add_event_cb(btn_save, saveIRDispositives, LV_EVENT_CLICKED, widgets);
 
     // Botón para volver a la pantalla RF
     lv_obj_t *btn_back = lv_btn_create(addIrScreen);

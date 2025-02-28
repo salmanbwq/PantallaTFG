@@ -5,6 +5,7 @@
 #include "Keyboard.h"
 #include "lvgl.h"
 
+static lv_obj_t *keyboard;
 
 void textAreaHandler(lv_event_t *e) {
     lv_event_code_t code = lv_event_get_code(e);

@@ -18,6 +18,7 @@
 #include <ui/RF/Send/SendRfScreen.h>
 #include <ui/RF/Utils/DispositiveSelectorType/DispositiveSelector.h>
 #include <ui/RF/Utils/JSONManager/RFDataRead.h>
+#include <ui/RF/Utils/JSONManager/RFDataStore.h>
 #include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
 
 static const char *TAG = "GarageRfScreen";
@@ -28,7 +29,8 @@ typedef enum Command {
     OPEN, CLOSE
 } Command;
 
-void goToGarageScreen(lv_event_t *event, const char *name, const DispositiveSelectorType type) {
+void goToGarageScreen(const char *name, const DispositiveSelectorType type) {
+    initializeFlags();
     switch (type) {
         case SENDER:
             ESP_LOGI(TAG, "Going to send %s", name);
@@ -43,18 +45,70 @@ void goToGarageScreen(lv_event_t *event, const char *name, const DispositiveSele
     lv_scr_load(garageRfScrn);
 }
 
-static void sendCommand(const char *commandName) {
+static void receiveCommandESPNOW(const char *commandName) {
+    initializeFlags();
+    char *freq = malloc(50 * sizeof(char));
+    strncpy(freq, getDeviceRF(instanceName), sizeof(freq));
+
+    if (strlen(freq) == 0) {
+        ESP_LOGI(TAG, "Command not found");
+        return;
+    }
+    char *commandToSend = malloc(100 * sizeof(char));
+
+    sprintf(commandToSend, "receiveRF/%s/", commandName);
+
+    esp_now_send_data(lcd, (uint8_t *) commandToSend, strlen(commandToSend));
+
+    while (!hasReceived()) {
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
+
+    if (getResult() == ESP_OK) {
+        ESP_LOGI(TAG, "Received command for %s", commandName);
+    } else {
+        showConfirmationPopup(garageRfScrn, "Failed receiving");
+        ESP_LOGI(TAG, "Failed receiving command %s", commandName);
+        return;
+    }
+
+    char *commandReceived = malloc(50 * sizeof(char));
+    strcpy(commandReceived, getBuffer());
+
+    if (updateRFJSON(instanceName, commandName, commandReceived) == ESP_OK) {
+        showConfirmationPopup(garageRfScrn, "Command stored");
+    } else {
+        //update command
+        showConfirmationPopup(garageRfScrn, "Error storing command");
+        ESP_LOGE(TAG, "Failed storing command");
+    }
+
+    free(freq);
+    free(commandToSend);
+    free(commandReceived);
+}
+
+static void sendCommandESPNOW(const char *commandName) {
+    if (strlen(commandName) == 0) {
+        ESP_LOGI(TAG, "Command name is empty");
+        return;
+    }
     char *commandStr = malloc(100 * sizeof(char));
     strncpy(commandStr, getCommandsFromJSON(instanceName, commandName), sizeof(commandStr));
 
     if (strlen(commandStr) == 0) {
-        ESP_LOGI(TAG, "Command not found");
+        showConfirmationPopup(garageRfScrn, "Command is empty");
+        ESP_LOGI(TAG, "Command to send is empty");
         return;
     }
 
-    esp_now_send_data(lcd, (uint8_t *) commandStr, strlen(commandStr));
+    char commandToSend[100];
 
-    if (!hasSent()) {
+    sprintf(commandToSend, "sendRF/%s/", commandStr);
+
+    esp_now_send_data(lcd, (uint8_t *) commandToSend, strlen(commandToSend));
+
+    while (!hasSent()) {
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 
@@ -73,11 +127,11 @@ static void sendCommand(lv_event_t *event) {
     switch (command) {
         case OPEN:
             ESP_LOGI(TAG, "Sending Open Command");
-            sendCommand("Open");
+            sendCommandESPNOW("Open");
             break;
         case CLOSE:
             ESP_LOGI(TAG, "Sending Close Command");
-            sendCommand("Close");
+            sendCommandESPNOW("Close");
             break;
     }
 }
@@ -87,9 +141,11 @@ static void receiveCommand(lv_event_t *event) {
     switch (command) {
         case OPEN:
             ESP_LOGI(TAG, "Receiving Open Command");
+            receiveCommandESPNOW("Open");
             break;
         case CLOSE:
             ESP_LOGI(TAG, "Receiving Close Command");
+            receiveCommandESPNOW("Close");
             break;
     }
 }

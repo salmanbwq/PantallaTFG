@@ -15,26 +15,28 @@
 #include "RF/RfScreen.h"
 #include "Settings/SettingsScreen.h"
 
+static lv_obj_t *mainInstance;
+
 void goToMainScreen(lv_event_t *event) {
-    deletePreviousScreen(mainScrn);
+    deletePreviousScreen(mainInstance);
     ESP_LOGI("mainScreen", "Going to main screen");
     mainScreenInit();
-    lv_scr_load(mainScrn);
+    lv_scr_load(mainInstance);
 }
 
 #include "lvgl.h"
 
 
 void mainScreenInit(void) {
-    mainScrn = lv_obj_create(NULL);
-    lv_scr_load(mainScrn);
+    mainInstance = lv_obj_create(NULL);
+    lv_scr_load(mainInstance);
 
     // ✅ Establecer fondo blanco
-    lv_obj_set_style_bg_color(mainScrn, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(mainScrn, LV_OPA_COVER, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(mainInstance, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(mainInstance, LV_OPA_COVER, LV_PART_MAIN);
 
     // 📌 Crear un contenedor para los botones con diseño de cuadrícula
-    lv_obj_t *gridContainer = lv_obj_create(mainScrn);
+    lv_obj_t *gridContainer = lv_obj_create(mainInstance);
     lv_obj_set_size(gridContainer, 240, 180); // Aumentamos la altura para más espacio
     lv_obj_center(gridContainer);
     lv_obj_set_style_bg_opa(gridContainer, LV_OPA_0, 0); // Hacer transparente el contenedor

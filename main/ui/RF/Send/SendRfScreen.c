@@ -13,6 +13,7 @@
 #include <ui/RF/Utils/Dropdown/RFDropDown.h>
 #include <ui/Settings/SettingsScreen.h>
 #include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
+#include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
 
 
 #define FILE_PATH "/spiffs/rf_devices.json"
@@ -21,7 +22,7 @@ static lv_obj_t *sendRfScrn;
 
 
 void goToSendRfScreen(lv_event_t *event) {
-    deletePreviousScreen(settingsScrn);
+    deletePreviousScreen(sendRfScrn);
     ESP_LOGI(TAG, "Going to Sending RfScreen");
     sendRfScreen();
     lv_scr_load(sendRfScrn);
@@ -37,6 +38,13 @@ static void sendRfScreen(void) {
     // Dropdown para el tipo de dispositivo
     lv_obj_t *dd_type = lv_dropdown_create(sendRfScrn);
     populateDropdownNames(dd_type, FILE_PATH);
+
+    if (lv_dropdown_get_option_count(dd_type) == 0) {
+        showConfirmationPopup(sendRfScrn, "Data empty");
+        lv_obj_add_state(dd_type, LV_STATE_DISABLED);
+    }
+
+
     lv_obj_set_width(dd_type, 150); // Ajustar ancho
     lv_obj_set_pos(dd_type, 75, 30); // Posición en la esquina superior izquierda
     lv_obj_add_event_cb(dd_type, dropdownEventHandlerRF, LV_EVENT_ALL, &dispositive_selector);

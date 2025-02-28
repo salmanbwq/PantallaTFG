@@ -13,5 +13,5 @@ void mainScreenInit(void);
 void goToMainScreen(lv_event_t *event);
 
 
-static lv_obj_t *mainScrn;
+
 #endif //MAINSCREEN_H

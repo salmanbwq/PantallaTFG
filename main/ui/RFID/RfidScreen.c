@@ -9,10 +9,10 @@
 #include <ui/MainScreen.h>
 #include <ui/CommonUI/InterfacesUtils.h>
 
-#include "ReceiveRfidScreen.h"
 
 #include "lvgl.h"
-#include "SendRfidScreen.h"
+#include "Receive/ReceiveRfidScreen.h"
+#include "Send/SendRfidScreen.h"
 
 void goToRfidScreen(lv_event_t *event) {
     deletePreviousScreen(rfidScrn);

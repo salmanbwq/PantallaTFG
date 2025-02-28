@@ -5,7 +5,6 @@
 #ifndef ADDRFDISPSCREEN_H
 #define ADDRFDISPSCREEN_H
 
-static lv_obj_t *addrfScreen;
 
 
 void goToAddRfDispScreen(lv_event_t *event);

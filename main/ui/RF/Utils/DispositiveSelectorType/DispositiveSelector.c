@@ -41,22 +41,12 @@ static void loadLightScreen(void) {
     lv_scr_load(lightRfScrn);
 }
 
-void changeToDeviceTypeScreen(lv_event_t *event, const char *deviceType, const char *selectedText,
+void changeToRFDeviceTypeScreen(const char *deviceType, const char *selectedText,
                               const DispositiveSelectorType type) {
-    switch (type) {
-        case SENDER:
-            ESP_LOGI(TAG, "SENDER %s", selectedText);
-            break;
-        default:
-            ESP_LOGI(TAG, "Uknown");
-            break;
-    }
-
-
     switch (get_command_type(deviceType)) {
         case Garage:
             ESP_LOGI(TAG, "Se ha seleccionado: %s", deviceType);
-            goToGarageScreen(event, selectedText, type);
+            goToGarageScreen(selectedText, type);
             break;
         case ALARM:
             ESP_LOGI(TAG, "Se ha seleccionado: %s", deviceType);

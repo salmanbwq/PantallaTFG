@@ -38,13 +38,25 @@ static void addDevicesListJson(const cJSON *json, const char *FILE_PATH) {
         return;
     }
 
+    // Genera la cadena JSON
     char *json_str = cJSON_Print(json);
+    if (!json_str) {
+        ESP_LOGE(TAG, "Error al convertir cJSON a string.");
+        fclose(file);
+        return;
+    }
+    ESP_LOGI(TAG, "ME QUEDE AQUI");
+
+    // Escribe en el archivo
     fwrite(json_str, 1, strlen(json_str), file);
     fclose(file);
+    ESP_LOGI(TAG, "LLEGUE AQI");
+    // Libera la memoria reservada por cJSON_Print
     free(json_str);
 
     ESP_LOGI(TAG, "Dispositivos RF guardados en JSON.");
 }
+
 
 void updateDevicesListJson(const cJSON *newJson, const char *FILE_PATH) {
     // Leer el JSON existente desde el archivo
@@ -149,6 +161,7 @@ void AddDevicesJson(cJSON *new_device, const char *FILE_PATH) {
         return;
     }
 
+
     char *name = cJSON_GetObjectItem(new_device, "name")->valuestring;
 
     // Verificar si el dispositivo ya existe
@@ -169,7 +182,7 @@ void AddDevicesJson(cJSON *new_device, const char *FILE_PATH) {
 
     // Guardar cambios
     addDevicesListJson(json, FILE_PATH);
-    cJSON_Delete(json);
+    // cJSON_Delete(json);
 
     ESP_LOGI(TAG, "Nuevo dispositivo agregado: ID %d, Nombre: %s", new_id, name);
 }

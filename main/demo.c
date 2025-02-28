@@ -22,7 +22,7 @@
 static const char *TAG = "demo";
 
 
-#define FILE_PATH "/spiffs/rf_devices.json"
+#define FILE_PATH "/spiffs/irDevices.json"
 
 void print_json_from_spiffs() {
     FILE *file = fopen(FILE_PATH, "r");

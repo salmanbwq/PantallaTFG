@@ -30,7 +30,6 @@ char *getDeviceType(char *name) {
     cJSON *json = getDeviceFromJson(name);
     if (json == NULL) {
         ESP_LOGE(TAG, "File does not exist: %s", name);
-        cJSON_Delete(json);
         return NULL;
     }
 
@@ -66,7 +65,7 @@ char *getDeviceRF(char *deviceName) {
 
 static char *getGarageCommand(const char *name, const char *commanName, cJSON *json, cJSON *commands) {
     if (commands == NULL) {
-        ESP_LOGE(TAG, "File does not exist: %s", name);
+        ESP_LOGE(TAG, "No command exist for %s", name);
         cJSON_Delete(json);
         return NULL;
     }
@@ -97,7 +96,7 @@ char *getCommandsFromJSON(const char *name, const char *commanName) {
     switch (get_command_type(deviceType)) {
         case Garage:
             ESP_LOGI(TAG, "Getting garage command %s, for %s ", commanName, name);
-            cJSON *commands = cJSON_GetObjectItemCaseSensitive(json, "commands");
+            cJSON *commands = cJSON_GetObjectItemCaseSensitive(json, "command");
             return getGarageCommand(name, commanName, json, commands);
         case ALARM:
         case LIGHT:

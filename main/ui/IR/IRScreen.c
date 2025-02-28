@@ -2,18 +2,16 @@
 // Created by salman on 24/11/24.
 //
 #include <string.h>
-#include "lvgl.h"
-#include "IRScreen.h"
+#include "../../../managed_components/lvgl__lvgl/lvgl.h"
 
 #include <esp_log.h>
-#include <lvgl.h>
 #include <ui/MainScreen.h>
 #include <ui/CommonUI/InterfacesUtils.h>
-#include <ui/CommonUI/Keyboard.h>
-#include <ui/RFID/ReceiveRfidScreen.h>
+#include "IRScreen.h"
+#include "Receive/ReceiveIRScreen.h"
+#include "Sender/SendIrScreen.h"
 
-#include "ReceiveIRScreen.h"
-#include "SendIrScreen.h"
+static lv_obj_t *irScrn;
 
 void goToIRScreen(lv_indev_t *indev) {
     deletePreviousScreen(irScrn);
