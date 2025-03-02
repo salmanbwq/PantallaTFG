@@ -122,7 +122,7 @@ static void sendCommandESPNOW(const char *commandName) {
     free(commandStr);
 }
 
-static void sendCommand(lv_event_t *event) {
+static void sendCommandRF(lv_event_t *event) {
     const Command command = *(Command *) lv_event_get_user_data(event);
     switch (command) {
         case OPEN:
@@ -136,7 +136,7 @@ static void sendCommand(lv_event_t *event) {
     }
 }
 
-static void receiveCommand(lv_event_t *event) {
+static void receiveCommandRF(lv_event_t *event) {
     const Command command = *(Command *) lv_event_get_user_data(event);
     switch (command) {
         case OPEN:
@@ -217,15 +217,15 @@ static void garageRfScreen(const char *name, const DispositiveSelectorType type)
         case SENDER:
             // Change callbacks to sender
             ESP_LOGI(TAG, "SENDER");
-            lv_obj_add_event_cb(btnOpen, sendCommand, LV_EVENT_CLICKED, &open);
-            lv_obj_add_event_cb(btnClose, sendCommand, LV_EVENT_CLICKED, &close);
+            lv_obj_add_event_cb(btnOpen, sendCommandRF, LV_EVENT_CLICKED, &open);
+            lv_obj_add_event_cb(btnClose, sendCommandRF, LV_EVENT_CLICKED, &close);
             lv_obj_add_event_cb(rtrnbtn, goToSendRfScreen, LV_EVENT_CLICKED, NULL);
             break;
         case RECEIVER:
             // Changer callbacks to receiver
             ESP_LOGI(TAG, "RECEIVER");
-            lv_obj_add_event_cb(btnOpen, receiveCommand, LV_EVENT_CLICKED, &open);
-            lv_obj_add_event_cb(btnClose, receiveCommand, LV_EVENT_CLICKED, &close);
+            lv_obj_add_event_cb(btnOpen, receiveCommandRF, LV_EVENT_CLICKED, &open);
+            lv_obj_add_event_cb(btnClose, receiveCommandRF, LV_EVENT_CLICKED, &close);
             lv_obj_add_event_cb(rtrnbtn, goToReceiveRFscreen, LV_EVENT_CLICKED, NULL);
             break;
         default:

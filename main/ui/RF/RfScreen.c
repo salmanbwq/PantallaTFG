@@ -48,5 +48,6 @@ static void rfScreenInit(void) {
     lv_obj_t *rtrnlb = lv_label_create(rtrn);
     lv_label_set_text(rtrnlb, "Return");
     lv_obj_center(rtrnlb);
+    lv_obj_set_style_bg_color(rtrn, lv_color_hex(0xff0000), 0);
     lv_obj_add_event_cb(rtrn, goToMainScreen, LV_EVENT_CLICKED, NULL);
 }

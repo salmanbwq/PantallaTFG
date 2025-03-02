@@ -32,7 +32,7 @@ static void addIrDispScreen() {
 
     // Dropdown para el tipo de dispositivo
     lv_obj_t *dd_type = lv_dropdown_create(addIrScreen);
-    lv_dropdown_set_options(dd_type, "TV\nA/C");
+    lv_dropdown_set_options(dd_type, "TV\nA/C\nLamp");
     lv_obj_set_width(dd_type, 140); // Ajustar ancho
     lv_obj_align(dd_type, LV_ALIGN_TOP_LEFT, 20, 40); // Posición en la esquina superior izquierda
 

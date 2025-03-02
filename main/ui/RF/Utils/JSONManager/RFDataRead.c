@@ -9,6 +9,7 @@
 #include <string.h>
 #include <misc/lv_types.h>
 #include <ui/RF/Utils/DispositiveSelectorType/DispositiveSelector.h>
+#include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
 #include <ui/UILibs/CJSONStorage/Write/WriteJson.h>
 
 #define FILE_PATH "/spiffs/rf_devices.json"
@@ -41,6 +42,7 @@ char *getDeviceType(char *name) {
         cJSON_Delete(json);
         return NULL;
     }
+    cJSON_Delete(json);
     return deviceType;
 }
 
@@ -60,6 +62,7 @@ char *getDeviceRF(char *deviceName) {
         cJSON_Delete(json);
         return NULL;
     }
+    cJSON_Delete(json);
     return deviceType;
 }
 
@@ -104,6 +107,7 @@ char *getCommandsFromJSON(const char *name, const char *commanName) {
             break;
         default: ;
     }
+    cJSON_Delete(json);
     return NULL;
 }
 
@@ -123,5 +127,6 @@ int getDeviceID(char *name) {
         cJSON_Delete(json);
         return NULL;
     }
+    cJSON_Delete(json);
     return deviceID;
 }

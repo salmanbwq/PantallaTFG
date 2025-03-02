@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <misc/lv_types.h>
+#include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
 #include <ui/UILibs/CJSONStorage/Write/WriteJson.h>
 #define FILE_PATH "/spiffs/irDevices.json"
 
@@ -26,18 +27,19 @@ char *getIRDeviceType(char *name) {
     cJSON *json = getDeviceFromJson(name);
     if (json == NULL) {
         ESP_LOGE(TAG, "File does not exist: %s", name);
-        cJSON_Delete(json);
         return NULL;
     }
 
-    char *deviceType = malloc(20 * sizeof(char));
-
-    strcpy(deviceType, cJSON_GetObjectItemCaseSensitive(json, "type")->valuestring);
-    if (strlen(deviceType) == 0) {
+    cJSON *typeItem = cJSON_GetObjectItemCaseSensitive(json, "type");
+    if (!cJSON_IsString(typeItem) || (typeItem->valuestring == NULL)) {
         ESP_LOGE(TAG, "Not found type for: %s", name);
         cJSON_Delete(json);
         return NULL;
     }
+
+    char *deviceType = strdup(typeItem->valuestring); // Copia segura
+
+    cJSON_Delete(json); // Liberar json después de usarlo
     return deviceType;
 }
 
@@ -45,27 +47,38 @@ char *getIRCommand(char *deviceName, const char *commandName) {
     cJSON *json = getDeviceFromJson(deviceName);
     if (json == NULL) {
         ESP_LOGE(TAG, "File does not exist for device %s", deviceName);
+        return NULL;
+    }
+
+    cJSON *commandArray = cJSON_GetObjectItemCaseSensitive(json, "command");
+    if (!cJSON_IsArray(commandArray)) {
+        ESP_LOGE(TAG, "Invalid command format for: %s", deviceName);
         cJSON_Delete(json);
         return NULL;
     }
 
-    char *commandContent = malloc(50 * sizeof(char));
+    char *commandContent = NULL;
 
-    cJSON *command = cJSON_GetObjectItemCaseSensitive(json, "command");
+    for (int i = 0; i < cJSON_GetArraySize(commandArray); i++) {
+        cJSON *item = cJSON_GetArrayItem(commandArray, i);
+        cJSON *nameItem = cJSON_GetObjectItem(item, "name");
+        cJSON *contentItem = cJSON_GetObjectItem(item, "content");
 
-    for (int i = 0; i < cJSON_GetArraySize(command); i++) {
-        cJSON *item = cJSON_GetArrayItem(command, i);
-        if (strcmp(cJSON_GetObjectItem(item, "name")->valuestring, commandName) == 0) {
-            strcpy(commandContent, cJSON_GetObjectItemCaseSensitive(item, "content")->valuestring);
+        if (cJSON_IsString(nameItem) && cJSON_IsString(contentItem) &&
+            strcmp(nameItem->valuestring, commandName) == 0) {
+            commandContent = strdup(contentItem->valuestring);
+            break; // Terminar búsqueda cuando se encuentre el comando
         }
     }
 
+    cJSON_Delete(json); // Liberar json después de usarlo
 
-    if (strlen(commandContent) == 0) {
+    if (commandContent == NULL || strlen(commandContent) == 0) {
         ESP_LOGE(TAG, "Not found content for: %s", deviceName);
-        cJSON_Delete(json);
         return NULL;
+    } else {
+        ESP_LOGI(TAG, "Command stored is %s", commandContent);
     }
-    ESP_LOGI(TAG, "Command stored is %s", commandContent);
+
     return commandContent;
 }

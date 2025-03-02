@@ -8,7 +8,8 @@
 typedef enum IRDeviceType {
     TV,
     UNKNOWN,
-    A_C
+    A_C,
+    LAMP
 } IRDeviceType;
 
 typedef enum IRActionType {

@@ -23,8 +23,9 @@ void dropdownEventHandler(lv_event_t *event) {
         selectedId = lv_dropdown_get_selected(dropdown);
         char *type = malloc(50 * sizeof(char));
         lv_dropdown_get_selected_str(dropdown, selectedText, sizeof(selectedText));
-        strcpy(type, getIRDeviceType(selectedText));
-
+        char *aux = getIRDeviceType(selectedText);
+        strcpy(type, aux);
+        free(aux);
         changeToIRDeviceTypeScreen(type, selectedText, action);
     }
 }

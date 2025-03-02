@@ -13,5 +13,5 @@
  */
 void goToACScreen(const char *instance_name, const IRActionType type);
 
-static void sendACScreen();
+static void ACScreen();
 #endif //AC_H

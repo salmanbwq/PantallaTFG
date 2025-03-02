@@ -12,6 +12,7 @@
 #include <cJSON/cJSON.h>
 #include <ui/IR/Utils/DispositiveSelector/IRDispositiveSelector.h>
 #include <ui/UILibs/CJSONStorage/JSONManager.h>
+#include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
 #include <ui/UILibs/CJSONStorage/Write/WriteJson.h>
 #include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
 static const char *TAG = "IRDataRead";
@@ -32,6 +33,23 @@ static void createTVObj(cJSON *json) {
 
     cJSON_AddItemToObject(json, "command", commands_array);
 }
+
+static void createLampObj(cJSON *json) {
+    cJSON *commands_array = cJSON_CreateArray();
+
+    // Inicializar con comandos vacíos
+    for (int i = 0; i < 2; i++) {
+        cJSON *cmd_obj = cJSON_CreateObject();
+        char commandName[20]; // Cadena con suficiente espacio
+        sprintf(commandName, "Command %d", i + 1);
+        cJSON_AddStringToObject(cmd_obj, "name", commandName); // Nombre del comando
+        cJSON_AddStringToObject(cmd_obj, "content", ""); // Contenido vacío por defecto
+        cJSON_AddItemToArray(commands_array, cmd_obj);
+    }
+
+    cJSON_AddItemToObject(json, "command", commands_array);
+}
+
 
 static void createACObj(cJSON *json) {
     cJSON *commands_array = cJSON_CreateArray();
@@ -63,6 +81,10 @@ static cJSON *getJson(const char *name, const char *type) {
         case A_C:
             ESP_LOGI(TAG, "Creating new %s Dispositive", type);
             createACObj(json);
+            break;
+        case LAMP:
+            ESP_LOGI(TAG, "Creating new %s Dispositive", type);
+            createLampObj(json);
             break;
 
         default: ESP_LOGE(TAG, "Unknown type");
@@ -133,24 +155,20 @@ esp_err_t updateIRJSON(char *name, const char *commandName, char *content) {
         cJSON *cmd_name = cJSON_GetObjectItem(cmd_obj, "name");
 
         if (cJSON_IsString(cmd_name) && strcmp(cmd_name->valuestring, commandName) == 0) {
-            // Encontramos un objeto con "name" vacío, lo actualizamos
-            cJSON_ReplaceItemInObject(cmd_obj, "content", cJSON_CreateString(content));
-
+            // Borrar y agregar nuevo contenido
+            cJSON_DeleteItemFromObject(cmd_obj, "content");
+            cJSON_AddStringToObject(cmd_obj, "content", content);
             updated = true;
-            ESP_LOGI(TAG, "Comando en la posición %d actualizado: {name: %s, content: %s}", i, commandName, content);
+            ESP_LOGI(TAG, "Comando actualizado: {name: %s, content: %s}", commandName, content);
             break;
         }
     }
 
     if (!updated) {
-        ESP_LOGW(TAG, "Todos los comandos están llenos, no se pudo actualizar.");
-        cJSON_Delete(file);
-    } else {
-        updateDevicesListJson(file, FILE_PATH); // Guardar cambios
-        cJSON_Delete(file);
-        return ESP_OK;
+        ESP_LOGW(TAG, "No se pudo actualizar ningún comando. Es posible que el nombre no coincida.");
     }
 
-    return ESP_FAIL;
+    updateDevicesListJson(file, FILE_PATH); // Guardar cambios
+    cJSON_Delete(file);
+    return updated ? ESP_OK : ESP_FAIL;
 }
-

@@ -7,6 +7,7 @@
 #include <esp_log.h>
 #include <string.h>
 #include <cJSON/cJSON.h>
+#include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
 #include <ui/UILibs/CJSONStorage/Write/WriteJson.h>
 #define FILE_PATH "/spiffs/rfidDevices.json"
 
