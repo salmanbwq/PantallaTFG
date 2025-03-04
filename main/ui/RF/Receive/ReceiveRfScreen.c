@@ -29,6 +29,7 @@ void goToReceiveRFscreen(lv_event_t *event) {
 static void receiveRfScreen(void) {
     static DispositiveSelectorType dispositive_selector = RECEIVER;
     receiveRfScrn = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(receiveRfScrn, lv_color_hex(0xc5d9db), 0);
 
     lv_obj_t *returnBtn = lv_btn_create(receiveRfScrn);
     lv_obj_set_size(receiveRfScrn, 150, 50);

@@ -77,6 +77,8 @@ static void deleteJsons(lv_event_t *event) {
 
 static void resetScreen() {
     resetScrn = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(resetScrn, lv_color_hex(0xc5d9db), 0);
+
     lv_obj_t *jsonDropdown = lv_dropdown_create(resetScrn);
     lv_obj_t *deleteBtn = lv_btn_create(resetScrn);
     lv_obj_t *returnBtn = lv_btn_create(resetScrn);

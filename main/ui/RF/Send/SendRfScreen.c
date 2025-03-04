@@ -31,6 +31,8 @@ void goToSendRfScreen(lv_event_t *event) {
 static void sendRfScreen(void) {
     static DispositiveSelectorType dispositive_selector = SENDER;
     sendRfScrn = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(sendRfScrn, lv_color_hex(0xc5d9db), 0);
+
     lv_obj_t *returnBtn = lv_btn_create(sendRfScrn);
     lv_obj_set_size(sendRfScrn, 150, 50);
     lv_obj_set_pos(sendRfScrn, 75, 100);

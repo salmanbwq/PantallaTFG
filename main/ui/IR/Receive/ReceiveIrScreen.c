@@ -30,6 +30,7 @@ void goToReceiveIrScreen() {
 static void receiveIrScreen() {
     static IRActionType action = RECEIVER;
     receiveIRInstance = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(receiveIRInstance, lv_color_hex(0xc5d9db), 0);
 
     lv_obj_t *title = lv_label_create(receiveIRInstance);
     lv_label_set_text(title, "Receive IR");

@@ -82,6 +82,7 @@ static void receiveRFIDData(lv_event_t *event) {
 
 static void receiveRfidScreen(void) {
     receiverFidScreen = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(receiverFidScreen, lv_color_hex(0xc5d9db), 0);
     lv_obj_t *ta_name = lv_dropdown_create(receiverFidScreen);
     lv_obj_t *ddDisp = lv_dropdown_create(receiverFidScreen);
     lv_obj_t *rtrnBtn = lv_btn_create(receiverFidScreen);
@@ -92,9 +93,12 @@ static void receiveRfidScreen(void) {
 
     lv_obj_t *sendBtn = lv_btn_create(receiverFidScreen);
     lv_obj_t *sendBtnLblL = lv_label_create(sendBtn);
+    lv_obj_t *dropdownLabel = lv_label_create(receiverFidScreen);
+    lv_label_set_text(dropdownLabel, "Select Dispositive");
+    lv_obj_align(dropdownLabel, LV_ALIGN_CENTER, -80, -100);
 
     populateDropdownNames(ddDisp, FILE_PATH);
-    lv_obj_set_pos(ddDisp, 20, 30);
+    lv_obj_align(ddDisp, LV_ALIGN_CENTER, -60, -60);
     lv_obj_set_size(ddDisp, 165, 40);
 
     if (lv_dropdown_get_option_count(ddDisp) == 0) {
@@ -106,10 +110,12 @@ static void receiveRfidScreen(void) {
     lv_obj_add_event_cb(ddDisp, populateDropdownCommands, LV_EVENT_ALL, ta_name);
 
 
-    lv_obj_set_pos(ta_name, 20, 30);
-    lv_obj_set_size(ta_name, 140, 50);
-    lv_obj_align(ta_name, LV_ALIGN_TOP_LEFT, 20, 105); // Posición relativa a los dropdowns
+    lv_obj_t *dropdownCommandLabel = lv_label_create(receiverFidScreen);
+    lv_label_set_text(dropdownCommandLabel, "Select Command");
+    lv_obj_align(dropdownCommandLabel, LV_ALIGN_CENTER, -80, 0);
 
+    lv_obj_align(ta_name, LV_ALIGN_CENTER, -60, 40);
+    lv_obj_set_size(ta_name, 165, 40);
     lv_label_set_text(sendBtnLblL, "Receive");
     lv_obj_center(sendBtnLblL);
     lv_obj_set_pos(sendBtn, 220, 50);

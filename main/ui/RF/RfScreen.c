@@ -28,6 +28,7 @@ static void rfScreenInit(void) {
     lv_obj_t *sendRF = lv_btn_create(rfScrn);
     lv_obj_t *recvRF = lv_btn_create(rfScrn);
     lv_obj_t *rtrn = lv_btn_create(rfScrn);
+    lv_obj_set_style_bg_color(rfScrn, lv_color_hex(0xc5d9db), 0);
 
     lv_obj_set_size(sendRF, 150, 50);
     lv_obj_set_pos(sendRF, 75, 30);

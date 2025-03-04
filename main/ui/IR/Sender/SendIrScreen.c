@@ -30,6 +30,7 @@ void goToIrSend() {
 static void sendIrScreen() {
     static IRActionType action = SENDER;
     sendIRInstance = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(sendIRInstance, lv_color_hex(0xc5d9db), 0);
 
     lv_obj_t *title = lv_label_create(sendIRInstance);
     lv_label_set_text(title, "Send IR");

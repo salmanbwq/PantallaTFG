@@ -9,6 +9,8 @@ void goToSendRfidScreen(lv_event_t *event);
 
 static void sendRfidScreen(void);
 
-static lv_obj_t *sendRfidScrn;
+static void sendStoredCommadRFID(lv_event_t *event);
+
+static void sendEspNowSendCommandRFID(char commandToSend[150]);
 
 #endif //SENDRFIDSCREEN_H

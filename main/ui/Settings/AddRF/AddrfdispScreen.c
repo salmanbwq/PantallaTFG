@@ -8,7 +8,6 @@
 #include <string.h>
 #include <ui/MainScreen.h>
 #include <ui/CommonUI/InterfacesUtils.h>
-#include <ui/CommonUI/Keyboard.h>
 #include <ui/RF/Utils/JSONManager/RFDataStore.h>
 #include <ui/Settings/SettingsScreen.h>
 
@@ -16,7 +15,10 @@
 
 
 static lv_obj_t *addRFInstance;
-
+static lv_obj_t *keyboard;
+static lv_obj_t *dd_type;
+static lv_obj_t *dd_freq;
+static lv_obj_t *ta_name;
 
 void goToAddRfDispScreen(lv_event_t *event) {
     deletePreviousScreen(addRFInstance);
@@ -25,36 +27,61 @@ void goToAddRfDispScreen(lv_event_t *event) {
     lv_scr_load(addRFInstance);
 }
 
+static void textAreaHandlerRF(lv_event_t *e) {
+    lv_event_code_t code = lv_event_get_code(e);
+
+    if (code == LV_EVENT_FOCUSED) {
+        lv_obj_clear_flag(keyboard, LV_OBJ_FLAG_HIDDEN); // Mostrar te
+        lv_keyboard_set_textarea(keyboard, ta_name);
+        lv_obj_add_flag(dd_type, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(dd_freq, LV_OBJ_FLAG_HIDDEN);
+
+        lv_obj_align(ta_name, LV_ALIGN_TOP_LEFT, 20, 20);
+
+        // Mover el cuadro de texto hacia arriba para que no lo tape el teclado
+    } else if (code == LV_EVENT_DEFOCUSED) {
+        lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN); // Ocultar teclado
+        lv_keyboard_set_textarea(keyboard, NULL);
+        lv_obj_clear_flag(dd_type, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_clear_flag(dd_freq, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_align(ta_name, LV_ALIGN_TOP_LEFT, 20, 140);
+    }
+}
+
 // Función para crear la pantalla de la interfaz gráfica
 static void addrfdispScreen() {
     addRFInstance = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(addRFInstance, lv_color_hex(0xc5d9db), 0);
+
     lv_obj_set_size(addRFInstance, 320, 240); // Tamaño de la pantalla
-    lv_obj_set_style_bg_color(addRFInstance, lv_color_hex(0xffffff), 0);
     lv_obj_set_style_bg_opa(addRFInstance, LV_OPA_COVER, 0);
 
     // Dropdown para el tipo de dispositivo
-    lv_obj_t *dd_type = lv_dropdown_create(addRFInstance);
+    dd_type = lv_dropdown_create(addRFInstance);
     lv_dropdown_set_options(dd_type, "Sensor\nGarage\nLamp");
     lv_obj_set_width(dd_type, 140); // Ajustar ancho
     lv_obj_align(dd_type, LV_ALIGN_TOP_LEFT, 20, 20); // Posición en la esquina superior izquierda
 
     // Dropdown para la frecuencia
-    lv_obj_t *dd_freq = lv_dropdown_create(addRFInstance);
+    dd_freq = lv_dropdown_create(addRFInstance);
     lv_dropdown_set_options(dd_freq, "433 MHz\n868 MHz\n2.4 GHz");
     lv_obj_set_width(dd_freq, 140); // Ajustar ancho
     lv_obj_align(dd_freq, LV_ALIGN_TOP_LEFT, 20, 80); // Posición relativa al primer dropdown
 
 
     // Textarea para ingresar el nombre
-    lv_obj_t *ta_name = lv_textarea_create(addRFInstance);
+    ta_name = lv_textarea_create(addRFInstance);
     lv_textarea_set_placeholder_text(ta_name, "Nombre del dispositivo");
     lv_textarea_set_max_length(ta_name, 31);
     lv_obj_set_width(ta_name, 140); // Ajustar ancho
     lv_obj_set_height(ta_name, 50);
     lv_obj_align(ta_name, LV_ALIGN_TOP_LEFT, 20, 140); // Posición relativa a los dropdowns
-    lv_obj_add_event_cb(ta_name, textAreaHandler, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ta_name, textAreaHandlerRF, LV_EVENT_ALL, NULL);
 
-    createKeyboard(addRFInstance);
+    keyboard = lv_keyboard_create(addRFInstance);
+    lv_obj_set_size(keyboard, 320, 100);
+    lv_obj_align(keyboard, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
 
 
     // Botón para guardar el dispositivo

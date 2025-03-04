@@ -26,6 +26,7 @@ void goToSettings(lv_event_t *event) {
 
 void settingsScreen() {
     settingInstance = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(settingInstance, lv_color_hex(0xc5d9db), 0);
 
     lv_obj_t *addRfDisp = lv_btn_create(settingInstance);
     lv_obj_t *rtrnMain = lv_btn_create(settingInstance);

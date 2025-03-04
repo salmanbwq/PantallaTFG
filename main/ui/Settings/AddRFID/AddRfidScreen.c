@@ -28,10 +28,10 @@ void goToAddRfidScreen(lv_event_t *event) {
 // Función para crear la pantalla de la interfaz gráfica
 static void addrfiddispScreen() {
     addRFIDInstance = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(addRFIDInstance, lv_color_hex(0xc5d9db), 0);
 
     ESP_LOGI("addRfidScreen", "Changed to Add Rfid Dispositive");
     lv_obj_set_size(addRFIDInstance, 320, 240);
-    lv_obj_set_style_bg_color(addRFIDInstance, lv_color_hex(0xffffff), 0);
     lv_obj_set_style_bg_opa(addRFIDInstance, LV_OPA_COVER, 0);
 
     // Textarea para ingresar el nombre
