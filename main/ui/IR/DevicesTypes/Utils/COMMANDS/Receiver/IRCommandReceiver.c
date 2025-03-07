@@ -17,7 +17,7 @@
 #include "lvgl.h"
 
 static char instanceName[100];
-static lv_obj_t *receiverIRInstance;
+static lv_obj_t *receiverRFInstance;
 
 static char *TAG = "Receive IR command";
 
@@ -28,7 +28,7 @@ void initializeReceiver(char instance[100], lv_obj_t *instanceObj) {
     }
 
     strcpy(instanceName, instance);
-    receiverIRInstance = instanceObj;
+    receiverRFInstance = instanceObj;
     ESP_LOGI(TAG, "Receiver initialized with %s info", instanceName);
 }
 
@@ -57,7 +57,7 @@ void receiveCommand(lv_event_t *e) {
 
         if (!receivedBuffer || receivedBuffer[0] == '\0') {
             ESP_LOGE(TAG, "No se recibió ningún comando");
-            showConfirmationPopup(receiverIRInstance, "Comando vacío");
+            showConfirmationPopup(receiverRFInstance, "Comando vacío");
             return;
         }
 
@@ -65,13 +65,13 @@ void receiveCommand(lv_event_t *e) {
 
         // Verificar si la clave JSON realmente existe antes de actualizar
         if (updateIRJSON(instanceName, txt, buffer) == ESP_OK) {
-            showConfirmationPopup(receiverIRInstance, "Comando guardado");
+            showConfirmationPopup(receiverRFInstance, "Comando guardado");
         } else {
-            showConfirmationPopup(receiverIRInstance, "Error al guardar comando");
+            showConfirmationPopup(receiverRFInstance, "Error al guardar comando");
             ESP_LOGE(TAG, "Error al actualizar el JSON");
         }
     } else {
-        showConfirmationPopup(receiverIRInstance, "Error al recibir comando");
+        showConfirmationPopup(receiverRFInstance, "Error al recibir comando");
         ESP_LOGE(TAG, "El comando no fue recibido correctamente");
     }
 }
