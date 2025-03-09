@@ -35,21 +35,36 @@ void initializeRFReceiver(char instance[100], lv_obj_t *instanceObj) {
 
 void receiveRFCommand(const char *commandName) {
     initializeFlags();
-    char *freq = malloc(50 * sizeof(char));
-    strncpy(freq, getDeviceRF(instanceName), sizeof(freq));
-
-    if (strlen(freq) == 0) {
+    if (strlen(commandName) == 0) {
         ESP_LOGI(TAG, "Command not found");
         return;
     }
-    char *commandToSend = malloc(100 * sizeof(char));
 
-    sprintf(commandToSend, "receiveRF/%s/", commandName);
+    char *aux = getDeviceType(instanceName);
 
-    esp_now_send_data(lcd, (uint8_t *) commandToSend, strlen(commandToSend));
+    if (!aux || strlen(aux) == 0) {
+        ESP_LOGI(TAG, "Command not found");
+        return;
+    }
+
+    char commandToSend[200];
+    char type[20];
+
+    strcpy(type, aux);
+
+    sprintf(commandToSend, "receiveRF/%s/%s", type, commandName);
+
+    esp_now_send_data(lcd, (uint8_t *) commandToSend, sizeof(commandToSend));
+
+    TickType_t startTime = xTaskGetTickCount();
 
     while (!hasReceived()) {
         vTaskDelay(100 / portTICK_PERIOD_MS);
+        if ((xTaskGetTickCount() - startTime) * portTICK_PERIOD_MS > 5000) {
+            ESP_LOGE(TAG, "Timeout: receiveRFID() no respondió en 5 segundos");
+            showConfirmationPopup(receiverRFInstance, "Timeout");
+            return;
+        }
     }
 
     if (getResult() == ESP_OK) {
@@ -60,7 +75,7 @@ void receiveRFCommand(const char *commandName) {
         return;
     }
 
-    char *commandReceived = malloc(50 * sizeof(char));
+    char *commandReceived[50];
     strcpy(commandReceived, getBuffer());
 
     if (updateRFJSON(instanceName, commandName, commandReceived) == ESP_OK) {
@@ -70,8 +85,4 @@ void receiveRFCommand(const char *commandName) {
         showConfirmationPopup(receiverRFInstance, "Error storing command");
         ESP_LOGE(TAG, "Failed storing command");
     }
-
-    free(freq);
-    free(commandToSend);
-    free(commandReceived);
 }

@@ -35,24 +35,35 @@ void initializeRFSender(char instance[100], lv_obj_t *instanceObj) {
 
 
 void sendRFCommand(const char *commandName) {
-    if (strlen(commandName) == 0) {
+    if (!commandName || strlen(commandName) == 0) {
         ESP_LOGI(TAG, "Command name is empty");
         return;
     }
-    char *commandStr = malloc(100 * sizeof(char));
-    strncpy(commandStr, getCommandsFromJSON(instanceName, commandName), sizeof(commandStr));
 
-    if (strlen(commandStr) == 0) {
+    char commandStr[100];
+    const char *commandFromJSON = getCommandsFromJSON(instanceName, commandName);
+    const char *aux = getDeviceType(instanceName);
+
+    if (!aux || strlen(aux) == 0) {
+        ESP_LOGI(TAG, "Command not found");
+        return;
+    }
+
+    if (!commandFromJSON || strlen(commandFromJSON) == 0) {
         showConfirmationPopup(senderRFInstance, "Command is empty");
         ESP_LOGI(TAG, "Command to send is empty");
         return;
     }
+    char type[20];
+    strcpy(type, aux);
+    strcpy(commandStr, commandFromJSON);
 
-    char commandToSend[100];
+    char commandToSend[200];
 
-    sprintf(commandToSend, "sendRF/%s/", commandStr);
+    // Evita desbordamiento con snprintf
+    sprintf(commandToSend, "sendRF/%s/%s/", type, commandStr);
 
-    esp_now_send_data(lcd, (uint8_t *) commandToSend, strlen(commandToSend));
+    esp_now_send_data(lcd, (uint8_t *) commandToSend, sizeof(commandToSend));
 
     while (!hasSent()) {
         vTaskDelay(100 / portTICK_PERIOD_MS);
@@ -64,6 +75,4 @@ void sendRFCommand(const char *commandName) {
         showConfirmationPopup(senderRFInstance, "Error sending command");
         ESP_LOGE(TAG, "Command was not sent");
     }
-
-    free(commandStr);
 }

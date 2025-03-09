@@ -130,7 +130,7 @@ static void garageRfScreen(const char *name, const DispositiveSelectorType type)
     switch (type) {
         case SENDER:
             ESP_LOGI(TAG, "SENDER");
-            // Change callbacks to sender
+        // Change callbacks to sender
             initializeRFSender(instanceName, garageRfScrn);
             lv_obj_add_event_cb(btnOpen, sendCommandRF, LV_EVENT_CLICKED, &open);
             lv_obj_add_event_cb(btnClose, sendCommandRF, LV_EVENT_CLICKED, &close);
@@ -139,7 +139,7 @@ static void garageRfScreen(const char *name, const DispositiveSelectorType type)
         case RECEIVER:
             // Changer callbacks to receiver
             ESP_LOGI(TAG, "RECEIVER");
-            initializeRFSender(instanceName, garageRfScrn);
+            initializeRFReceiver(instanceName, garageRfScrn);
             lv_obj_add_event_cb(btnOpen, receiveCommandRF, LV_EVENT_CLICKED, &open);
             lv_obj_add_event_cb(btnClose, receiveCommandRF, LV_EVENT_CLICKED, &close);
             lv_obj_add_event_cb(rtrnbtn, goToReceiveRFscreen, LV_EVENT_CLICKED, NULL);

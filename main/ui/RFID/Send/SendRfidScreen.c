@@ -102,11 +102,12 @@ static void onRFIDSendAction(lv_event_t *event) {
             showConfirmationPopup(sendRfidScrn, "Command to send is empty");
             return;
         };
-        if (strlen(lv_textarea_get_text(textEntrance)) > 50) {
+        if (strlen(lv_textarea_get_text(textEntrance)) > 14) {
             ESP_LOGI(TAG, "Command to send is too long");
+            showConfirmationPopup(sendRfidScrn, "Command to long");
             return;
         }
-        char command[50];
+        char command[20];
         strcpy(command, lv_textarea_get_text(textEntrance));
         char commandToSend[150];
         sprintf(commandToSend, "sendRfid/%s/", command);
@@ -120,6 +121,7 @@ static void onRFIDSendAction(lv_event_t *event) {
 
 static void sendEspNowSendCommandRFID(char commandToSend[150]) {
     initializeFlags();
+
     esp_now_send_data(lcd, (uint8_t *) commandToSend, strlen(commandToSend) + 1);
 
     while (!hasSent()) {

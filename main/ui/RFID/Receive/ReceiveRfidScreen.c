@@ -52,9 +52,17 @@ static void receiveRFIDData(lv_event_t *event) {
     char *command = "receiveRfid/";
     esp_now_send_data(lcd, (uint8_t *) command, strlen(command) + 1);
 
+    TickType_t startTime = xTaskGetTickCount();
+
+
     // Esperar respuesta de ESP-NOW
     while (!hasReceived()) {
         vTaskDelay(100 / portTICK_PERIOD_MS);
+        if ((xTaskGetTickCount() - startTime) * portTICK_PERIOD_MS > 5000) {
+            ESP_LOGE(TAG, "Timeout: receiveRFID() no respondió en 5 segundos");
+            showConfirmationPopup(receiverFidScreen, "Timeout");
+            return;
+        }
     }
 
     // Obtener los datos recibidos
