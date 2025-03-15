@@ -1,11 +1,21 @@
-# ESP32-2432S028R
+# Remote controller LCD
 
-![Static Badge](https://img.shields.io/badge/DEVICE-ESP32--2432S028R-8A2BE2) ![Static Badge](https://img.shields.io/badge/MCU-ESP32-8A2BE2)
-![Static Badge](https://img.shields.io/badge/OS-FreeRTOS-green) ![Static Badge](https://img.shields.io/badge/SDK-ESP--IDF%20v5.x-blue)
+![Device](https://img.shields.io/badge/DEVICE-ESP32--2432S028R-8A2BE2)
+![MCU](https://img.shields.io/badge/MCU-ESP32-8A2BE2)
+![OS](https://img.shields.io/badge/OS-FreeRTOS-green)
+![SDK](https://img.shields.io/badge/SDK-ESP--IDF%20v5.x-blue)
 
-Barebones example, to demonstrate the usage of [esp_lvgl_port](https://components.espressif.com/components/espressif/esp_lvgl_port) and [lvgl](https://github.com/lvgl/lvgl/) on a Sunton 2432S028R display.
+This repository contains code for remote controller lcd.
 
-### See also:
+## 📌 Characteristics
 
-* [ESP32-2432S028R](https://github.com/limpens/esp32-2432S028R) original example repo
-* [The CYD github](https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/tree/main) with a lot of information about these boards
+- 📟 **Lcd:** Sunton ESP32-2432S028R (240x320 TFT con touchscreen)
+- 🖥️ **MCU:** ESP32
+- 📚 **Framework:** ESP-IDF v5.x
+- 🎨 **Graphic framework:** LVGL
+- 🎛️ **Touchscreen:** XPT2046
+
+## References
+
+- 🖥️ Original repository LCD code [esp32-2432S028R](https://github.com/limpens/esp32-2432S028R) 
+- 📘 Lvgl documentation [LVGL Doc](https://lvgl.io/).
