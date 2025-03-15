@@ -7,10 +7,15 @@
 #include <esp_now.h>
 #include "lvgl.h"
 
-
+/**
+ * Method to initialize Main screen
+ */
 void mainScreenInit(void);
 
-void goToMainScreen(lv_event_t *event);
+/**
+ * Method to call Main screen.
+ */
+void goToMainScreen();
 
 
 

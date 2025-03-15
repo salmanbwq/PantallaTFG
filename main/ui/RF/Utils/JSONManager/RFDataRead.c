@@ -46,25 +46,6 @@ char *getDeviceType(char *name) {
     return deviceType;
 }
 
-char *getDeviceRF(char *deviceName) {
-    cJSON *json = getDeviceFromJson(deviceName);
-    if (json == NULL) {
-        ESP_LOGE(TAG, "File does not exist: %s", deviceName);
-        cJSON_Delete(json);
-        return NULL;
-    }
-
-    char *deviceType = malloc(20 * sizeof(char));
-
-    strcpy(deviceType, cJSON_GetObjectItemCaseSensitive(json, "freq")->valuestring);
-    if (strlen(deviceType) == 0) {
-        ESP_LOGE(TAG, "Not found type for: %s", deviceName);
-        cJSON_Delete(json);
-        return NULL;
-    }
-    cJSON_Delete(json);
-    return deviceType;
-}
 
 static char *getGarageCommand(const char *name, const char *commanName, cJSON *json, cJSON *commands) {
     if (commands == NULL) {
@@ -112,21 +93,3 @@ char *getCommandsFromJSON(const char *name, const char *commanName) {
 }
 
 
-int getDeviceID(char *name) {
-    cJSON *json = getDeviceFromJson(name);
-    if (json == NULL) {
-        ESP_LOGE(TAG, "File does not exist: %s", name);
-        cJSON_Delete(json);
-        return NULL;
-    }
-
-    int deviceID = cJSON_GetObjectItemCaseSensitive(json, "id")->valueint;
-
-    if (strlen(deviceID) == 0) {
-        ESP_LOGE(TAG, "Not found device ID for: %s", name);
-        cJSON_Delete(json);
-        return NULL;
-    }
-    cJSON_Delete(json);
-    return deviceID;
-}

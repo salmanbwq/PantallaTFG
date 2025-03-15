@@ -20,7 +20,7 @@ static lv_obj_t *dd_type;
 static lv_obj_t *dd_freq;
 static lv_obj_t *ta_name;
 
-void goToAddRfDispScreen(lv_event_t *event) {
+void goToAddRfDispScreen() {
     deletePreviousScreen(addRFInstance);
     ESP_LOGI("Addrfdisp", "Going to AddRfDispScreen");
     addrfdispScreen();

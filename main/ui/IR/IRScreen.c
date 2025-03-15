@@ -13,7 +13,7 @@
 
 static lv_obj_t *irScrn;
 
-void goToIRScreen(lv_indev_t *indev) {
+void goToIRScreen() {
     deletePreviousScreen(irScrn);
     ESP_LOGI("IRScreen", "Going to IR Screen");
     irScreen();

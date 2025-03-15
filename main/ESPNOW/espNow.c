@@ -3,7 +3,6 @@
 //
 
 
-#define ESP_CHANNEL 1
 #include "espNow.h"
 #include <esp_log.h>
 #include <esp_mac.h>
@@ -12,6 +11,11 @@
 #include <esp_wifi.h>
 #include <nvs_flash.h>
 #include <string.h>
+
+#define ESP_CHANNEL 11
+#define BUFFER_SIZE 256 // Definir tamaño adecuado
+
+static char bufferLectura[BUFFER_SIZE]; // Definir el buffer correctamente
 
 
 //  ADDR ESP32
@@ -34,7 +38,7 @@ esp_err_t init_wifi(void) {
     esp_wifi_start();
 
     // 🔥 CAMBIAR CANAL A 11
-    ESP_ERROR_CHECK(esp_wifi_set_channel(11, WIFI_SECOND_CHAN_NONE));
+    ESP_ERROR_CHECK(esp_wifi_set_channel(ESP_CHANNEL, WIFI_SECOND_CHAN_NONE));
 
     ESP_LOGI("WIFI_INIT", "📡 WiFi inicializado en canal 11");
     return ESP_OK;
@@ -69,7 +73,7 @@ esp_err_t init_esp_now(esp_now_recv_cb_t recv) {
 esp_err_t register_peer(uint8_t *peer_addr) {
     esp_now_peer_info_t esp_now_peer_info = {};
     memcpy(esp_now_peer_info.peer_addr, peer_mac, ESP_NOW_ETH_ALEN);
-    esp_now_peer_info.channel = 11;
+    esp_now_peer_info.channel = ESP_CHANNEL;
     esp_now_peer_info.ifidx = ESP_IF_WIFI_STA;
     esp_now_add_peer(&esp_now_peer_info);
     return ESP_OK;

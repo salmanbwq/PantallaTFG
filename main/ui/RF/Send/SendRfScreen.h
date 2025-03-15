@@ -4,14 +4,11 @@
 
 #ifndef SENDRFSCREEN_H
 #define SENDRFSCREEN_H
-static lv_obj_t *rtrn;
 
-static uint16_t selectedId;
-
-
-static char *ID = "SendRfScreen";
-
-void goToSendRfScreen(lv_event_t *event);
+/**
+ * Method to call Send Rf Screen
+ */
+void goToSendRfScreen();
 
 static void sendRfScreen(void);
 

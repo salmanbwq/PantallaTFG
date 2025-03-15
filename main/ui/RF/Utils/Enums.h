@@ -7,6 +7,4 @@
 typedef enum DispositiveSelectorType {
     SENDER, RECEIVER
 } DispositiveSelectorType;
-
-
 #endif //ENUMS_H

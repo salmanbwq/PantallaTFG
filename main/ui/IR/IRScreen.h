@@ -8,9 +8,8 @@
 
 /**
  * Method to change to IR Screen
- * @param indev Arguments passed by callback method
  */
-void goToIRScreen(lv_indev_t *indev);
+void goToIRScreen();
 
 static void irScreen();
 

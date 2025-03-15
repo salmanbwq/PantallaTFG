@@ -6,14 +6,11 @@
 #define ADDDISPSCREEN_H
 
 
-#include "lvgl.h"
-
-
 static void addIrDispScreen();
 
-void goToAddIrDispScreen(lv_event_t *event);
-
-
-
+/**
+ * Method to call Add IR screen
+ */
+void goToAddIrDispScreen();
 
 #endif //ADDDISPSCREEN_H

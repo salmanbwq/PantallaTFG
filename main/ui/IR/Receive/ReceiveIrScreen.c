@@ -9,7 +9,6 @@
 #include <ui/IR/Utils/Enums.h>
 #include <ui/IR/Utils/DispositiveSelector/IRDispositiveSelector.h>
 #include <ui/IR/Utils/DropDown/IRDropdown.h>
-#include <ui/IR/Utils/JSONManager/IRDataRead.h>
 #include <ui/UILibs/CJSONStorage/Read/ReadJson.h>
 #include <ui/UILibs/Popup/Confirmation/ConfirmationPopup.h>
 

@@ -45,8 +45,15 @@ void receiveCommand(lv_event_t *e) {
     char cmd[100] = "receiveIR/";
     esp_now_send_data(lcd, (uint8_t *) cmd, strlen(cmd) + 1);
 
+    TickType_t startTime = xTaskGetTickCount();
+
     while (!hasReceived()) {
         vTaskDelay(100 / portTICK_PERIOD_MS);
+        if ((xTaskGetTickCount() - startTime) * portTICK_PERIOD_MS > 5000) {
+            ESP_LOGE(TAG, "Timeout: receiveRFID() no respondió en 5 segundos");
+            showConfirmationPopup(receiverRFInstance, "Timeout");
+            return;
+        }
     }
 
     ESP_LOGI(TAG, "Comando IR recibido");

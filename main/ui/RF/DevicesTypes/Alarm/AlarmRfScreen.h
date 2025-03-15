@@ -4,10 +4,11 @@
 
 #ifndef ALARMRFSCREEN_H
 #define ALARMRFSCREEN_H
-#include "lvgl.h"
+/**
+ * Method to load Alarm RF screen
+ */
+void loadAlarmScreen(void);
 
-static lv_obj_t *alarmRfScrn;
-
-void alarmRfScreen(void);
+static void alarmRfScreen(void);
 
 #endif //ALARMRFSCREEN_H

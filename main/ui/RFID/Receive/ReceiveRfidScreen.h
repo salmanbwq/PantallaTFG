@@ -6,10 +6,14 @@
 #define RECEIVERFIDSCREEN_H
 #include "lvgl.h"
 
-void goToReceiveRfidScreen(lv_event_t *event);
+/**
+ * Method to call Receive RFID Screen
+ */
+void goToReceiveRfidScreen();
 
 static void receiveRfidScreen(void);
 
-static lv_obj_t *receiverFidScreen;
+static void receiveRFIDData(lv_event_t *event);
+
 
 #endif //RECEIVERFIDSCREEN_H

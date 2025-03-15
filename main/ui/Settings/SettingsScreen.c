@@ -17,14 +17,14 @@
 
 static lv_obj_t *settingInstance;
 
-void goToSettings(lv_event_t *event) {
+void goToSettings() {
     deletePreviousScreen(settingInstance);
     ESP_LOGI("SettingsScreen", "Going to settings screen");
     settingsScreen();
     lv_scr_load(settingInstance);
 }
 
-void settingsScreen() {
+static void settingsScreen() {
     settingInstance = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(settingInstance, lv_color_hex(0xc5d9db), 0);
 

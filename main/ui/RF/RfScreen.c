@@ -14,7 +14,7 @@
 
 static lv_obj_t *rfScrn;
 
-void goToRfScreen(lv_event_t *event) {
+void goToRfScreen() {
     deletePreviousScreen(rfScrn);
     ESP_LOGI("RfScreen", "Going to RfScreen");
     rfScreenInit();

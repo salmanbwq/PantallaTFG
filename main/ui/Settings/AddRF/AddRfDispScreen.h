@@ -6,8 +6,10 @@
 #define ADDRFDISPSCREEN_H
 
 
-
-void goToAddRfDispScreen(lv_event_t *event);
+/**
+ * Method call Add Rf Screen
+ */
+void goToAddRfDispScreen();
 
 static void addrfdispScreen();
 

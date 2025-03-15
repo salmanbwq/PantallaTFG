@@ -32,7 +32,7 @@ static lv_obj_t *keyboard;
 static lv_obj_t *labelOpt1;
 static lv_obj_t *labelOpt2;
 
-void goToSendRfidScreen(lv_event_t *event) {
+void goToSendRfidScreen() {
     deletePreviousScreen(sendRfidScrn);
     ESP_LOGI("SendRfidScreen", "Going to send RfidScreen");
     sendRfidScreen();
@@ -93,7 +93,7 @@ static void onSwitchChange(lv_event_t *event) {
 }
 
 
-static void onRFIDSendAction(lv_event_t *event) {
+static void onRFIDSendAction() {
     //ESP_LOGI(TAG, "New send action triggered!");
     // Aquí puedes agregar la nueva funcionalidad deseada
     if (lv_obj_has_state(checkBox, LV_STATE_CHECKED)) {
@@ -114,7 +114,7 @@ static void onRFIDSendAction(lv_event_t *event) {
         sendEspNowSendCommandRFID(commandToSend);
         lv_textarea_set_text(textEntrance, "");
     } else {
-        sendStoredCommadRFID(event);
+        sendStoredCommadRFID();
     }
 }
 
@@ -136,7 +136,7 @@ static void sendEspNowSendCommandRFID(char commandToSend[150]) {
     }
 }
 
-static void sendStoredCommadRFID(lv_event_t *event) {
+static void sendStoredCommadRFID() {
     char commandName[100];
     char dispName[100];
     lv_dropdown_get_selected_str(ddCommand, commandName, sizeof(commandName));

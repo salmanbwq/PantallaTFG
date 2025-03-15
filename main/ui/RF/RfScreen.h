@@ -4,10 +4,11 @@
 
 #ifndef RFSCREEN_H
 #define RFSCREEN_H
-#include <misc/lv_types.h>
 
-
-void goToRfScreen(lv_event_t *event);
+/**
+ * Method to call RF Screen.
+ */
+void goToRfScreen();
 
 static void rfScreenInit(void);
 

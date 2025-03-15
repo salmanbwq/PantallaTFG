@@ -13,8 +13,9 @@
 #include "lvgl.h"
 #include "Receive/ReceiveRfidScreen.h"
 #include "Send/SendRfidScreen.h"
+static lv_obj_t *rfidScrn;
 
-void goToRfidScreen(lv_event_t *event) {
+void goToRfidScreen() {
     deletePreviousScreen(rfidScrn);
     ESP_LOGI("RfidScreen", "Going to RfidScreen");
     initRfidScreen();

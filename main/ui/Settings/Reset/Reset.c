@@ -16,6 +16,11 @@
 static const char *TAG = "Reset";
 static lv_obj_t *resetScrn;
 
+typedef enum JsonTypes {
+    RF, RFID, IR, ALL, UNKNOWN
+} JsonTypes;
+
+
 
 JsonTypes getJsonName(const char *command) {
     if (strcmp(command, "Delete RF") == 0) return RF;
@@ -26,7 +31,7 @@ JsonTypes getJsonName(const char *command) {
 }
 
 
-void goToResetScreen(lv_event_t *event) {
+void goToResetScreen() {
     deletePreviousScreen(resetScrn);
     ESP_LOGI("AddRfidScreen", "Going to AddRfidScreen");
     resetScreen();

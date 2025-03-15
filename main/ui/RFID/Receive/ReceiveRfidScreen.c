@@ -20,10 +20,11 @@
 
 #define FILE_PATH "/spiffs/rfidDevices.json"
 static const char *TAG = "ReceiveRfidScreen";
+static lv_obj_t *receiverFidScreen;
 
-void goToReceiveRfidScreen(lv_event_t *event) {
+void goToReceiveRfidScreen() {
     deletePreviousScreen(receiverFidScreen);
-    ESP_LOGI("ReceiveRfidScreen", "Going to receive rfid");
+    ESP_LOGI(TAG, "Going to receive rfid");
     receiveRfidScreen();
     lv_scr_load(receiverFidScreen);
 }

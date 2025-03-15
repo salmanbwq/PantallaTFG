@@ -4,13 +4,11 @@
 
 #ifndef RESET_H
 #define RESET_H
-#include <misc/lv_types.h>
-
-typedef enum JsonTypes {
-    RF, RFID, IR, ALL, UNKNOWN
-} JsonTypes;
 
 static void resetScreen();
 
-void goToResetScreen(lv_event_t *event);
+/**
+ * Method to call reset screen.
+ */
+void goToResetScreen();
 #endif //RESET_H

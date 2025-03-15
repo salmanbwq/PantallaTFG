@@ -1,4 +1,5 @@
-#include <esp_log.h>#include "Loading.h"
+#include <esp_log.h>
+#include "Loading.h"
 #include "lvgl.h"
 
 static lv_obj_t *loading_popup = NULL;

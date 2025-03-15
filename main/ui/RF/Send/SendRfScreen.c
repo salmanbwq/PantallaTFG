@@ -20,7 +20,7 @@ static const char *TAG = "SendRFScreen";
 static lv_obj_t *sendRfScrn;
 
 
-void goToSendRfScreen(lv_event_t *event) {
+void goToSendRfScreen() {
     deletePreviousScreen(sendRfScrn);
     ESP_LOGI(TAG, "Going to Sending RfScreen");
     sendRfScreen();

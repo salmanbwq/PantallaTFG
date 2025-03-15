@@ -17,14 +17,12 @@
 
 static lv_obj_t *mainInstance;
 
-void goToMainScreen(lv_event_t *event) {
+void goToMainScreen() {
     deletePreviousScreen(mainInstance);
     ESP_LOGI("mainScreen", "Going to main screen");
     mainScreenInit();
     lv_scr_load(mainInstance);
 }
-
-#include "lvgl.h"
 
 
 void mainScreenInit(void) {

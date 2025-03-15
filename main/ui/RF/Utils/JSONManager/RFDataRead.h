@@ -4,23 +4,26 @@
 
 #ifndef RFDATAREAD_H
 #define RFDATAREAD_H
-#include <stdbool.h>
 #include <cJSON/cJSON.h>
 
-typedef struct {
-    char rf[32];
-    char command1[32];
-    char command2[32];
-} CommandData;
+static char *getGarageCommand(const char *name, const char *commanName, cJSON *json, cJSON *commands);
 
+static cJSON *getDeviceFromJson(const char *deviceName);
 
+/**
+ * Method to get Device Type
+ * @param name Device name
+ * @return Device type
+ */
 char *getDeviceType(char *name);
 
-int getDeviceID(char *name);
-
+/**
+ * Method to get Device command
+ * @param name Device name
+ * @param commanName Command name
+ * @return Command
+ */
 char *getCommandsFromJSON(const char *name, const char *commanName);
-
-char *getDeviceRF(char *deviceName);
 
 
 #endif //RFDATAREAD_H

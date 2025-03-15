@@ -114,3 +114,41 @@ cJSON *getJsonByName(const char *name, const char *FILE_PATH) {
 
     return deviceCopy; // Retorna el JSON del dispositivo encontrado (debe liberarse con `cJSON_Delete()`)
 }
+
+
+void print_json_from_spiffs(const char *file_path) {
+    FILE *file = fopen(file_path, "r");
+    if (!file) {
+        ESP_LOGE("SPIFFS", "No se pudo abrir el archivo JSON");
+        return;
+    }
+
+    // Obtener el tamaño del archivo
+    fseek(file, 0, SEEK_END);
+    long fileSize = ftell(file);
+    rewind(file);
+
+    if (fileSize <= 0) {
+        ESP_LOGE("SPIFFS", "El archivo JSON está vacío o corrupto.");
+        fclose(file);
+        return;
+    }
+
+    // Asignar memoria dinámica para leer el archivo completo
+    char *buffer = (char *) malloc(fileSize + 1);
+    if (!buffer) {
+        ESP_LOGE("SPIFFS", "No se pudo asignar memoria para leer el JSON.");
+        fclose(file);
+        return;
+    }
+
+    fread(buffer, 1, fileSize, file);
+    buffer[fileSize] = '\0'; // Asegurar terminación de string
+
+    fclose(file);
+
+    ESP_LOGI("SPIFFS", "Contenido del JSON:\n%s", buffer);
+
+    free(buffer); // Liberar memoria después de usarla
+}
+

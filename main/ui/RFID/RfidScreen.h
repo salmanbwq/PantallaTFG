@@ -4,11 +4,11 @@
 
 #ifndef RFIDSCREEN_H
 #define RFIDSCREEN_H
-#include <misc/lv_types.h>
 
-static lv_obj_t *rfidScrn;
-
-void goToRfidScreen(lv_event_t *event);
+/**
+ * Method to call RFID Screen
+ */
+void goToRfidScreen();
 
 static void initRfidScreen();
 

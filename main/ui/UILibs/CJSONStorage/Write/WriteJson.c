@@ -36,7 +36,7 @@ static void addDevicesListJson(const cJSON *json, const char *FILE_PATH) {
 }
 
 
-void updateDevicesListJson(const cJSON *newJson, const char *FILE_PATH) {
+void updateDevicesListJson(const cJSON *json, const char *FILE_PATH) {
     // Leer JSON existente
     cJSON *existingJson = readDevices(FILE_PATH);
     if (!existingJson || !cJSON_IsArray(existingJson)) {
@@ -45,14 +45,14 @@ void updateDevicesListJson(const cJSON *newJson, const char *FILE_PATH) {
     }
 
     // Validar que el JSON a agregar sea válido
-    if (!newJson || !cJSON_IsObject(newJson)) {
+    if (!json || !cJSON_IsObject(json)) {
         ESP_LOGE(TAG, "El nuevo JSON no es válido.");
         cJSON_Delete(existingJson);
         return;
     }
 
     // Obtener nombre del nuevo dispositivo con verificación
-    cJSON *nameObj = cJSON_GetObjectItem(newJson, "name");
+    cJSON *nameObj = cJSON_GetObjectItem(json, "name");
     if (!nameObj || !cJSON_IsString(nameObj)) {
         ESP_LOGE(TAG, "El nuevo dispositivo no tiene nombre válido.");
         cJSON_Delete(existingJson);
@@ -70,7 +70,7 @@ void updateDevicesListJson(const cJSON *newJson, const char *FILE_PATH) {
         if (name && strcmp(name->valuestring, newDeviceName) == 0) {
             // Dispositivo encontrado, eliminarlo antes de reemplazarlo
             cJSON_Delete(cJSON_DetachItemFromArray(existingJson, index));
-            cJSON_InsertItemInArray(existingJson, index, cJSON_Duplicate(newJson, 1));
+            cJSON_InsertItemInArray(existingJson, index, cJSON_Duplicate(json, 1));
             found = true;
             ESP_LOGI(TAG, "Dispositivo '%s' actualizado.", newDeviceName);
             break;
@@ -81,7 +81,7 @@ void updateDevicesListJson(const cJSON *newJson, const char *FILE_PATH) {
     // Si no se encontró, agregarlo
     if (!found) {
         ESP_LOGI(TAG, "Dispositivo '%s' no encontrado. Agregando nuevo.", newDeviceName);
-        cJSON_AddItemToArray(existingJson, cJSON_Duplicate(newJson, 1));
+        cJSON_AddItemToArray(existingJson, cJSON_Duplicate(json, 1));
     }
 
     // Guardar JSON actualizado

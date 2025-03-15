@@ -17,7 +17,7 @@ static lv_obj_t *keyboard;
 static lv_obj_t *ta_name;
 static lv_obj_t *dd_type;
 
-void goToAddIrDispScreen(lv_event_t *event) {
+void goToAddIrDispScreen() {
     deletePreviousScreen(addIrScreen);
     ESP_LOGI("AddIrDispScreen", "Going to add ir disp screen");
     addIrDispScreen();

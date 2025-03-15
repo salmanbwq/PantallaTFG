@@ -4,9 +4,11 @@
 
 #ifndef RECEIVERFSCREEN_H
 #define RECEIVERFSCREEN_H
-static lv_obj_t *receiveRfScrn;
 
-void goToReceiveRFscreen(lv_event_t *event);
+/**
+ * Method to call Receive RF screen
+ */
+void goToReceiveRFscreen();
 
 static void receiveRfScreen(void);
 

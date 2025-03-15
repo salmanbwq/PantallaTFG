@@ -7,7 +7,10 @@
 
 static void addrfiddispScreen();
 
-void goToAddRfidScreen(lv_event_t *event);
+/**
+ * Method to call Add Rfid screen
+ */
+void goToAddRfidScreen();
 
 
 

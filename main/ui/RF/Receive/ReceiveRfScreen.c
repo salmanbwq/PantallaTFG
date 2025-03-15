@@ -16,8 +16,9 @@
 
 #define FILE_PATH "/spiffs/rf_devices.json"
 
+static lv_obj_t *receiveRfScrn;
 
-void goToReceiveRFscreen(lv_event_t *event) {
+void goToReceiveRFscreen() {
     deletePreviousScreen(receiveRfScrn);
     ESP_LOGI("ReceiveRfScreen", "Going to receive RF screen");
     receiveRfScreen();

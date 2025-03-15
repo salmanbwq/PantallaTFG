@@ -5,9 +5,12 @@
 #ifndef SETTINGSSCREEN_H
 #define SETTINGSSCREEN_H
 
-void goToSettings(lv_event_t *event);
+/**
+ * Method to call settings screen.
+ */
+void goToSettings();
 
-void settingsScreen();
+static void settingsScreen();
 
 
 

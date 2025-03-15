@@ -5,9 +5,21 @@
 #include "lvgl.h"
 #include "AlarmRfScreen.h"
 
+#include <ui/CommonUI/InterfacesUtils.h>
 #include <ui/RF/Send/SendRfScreen.h>
+static lv_obj_t *alarmRfScrn;
 
-void alarmRfScreen() {
+ void loadAlarmScreen(void) {
+    if (!alarmRfScrn) {
+        alarmRfScrn = lv_obj_create(NULL);
+    }
+    deletePreviousScreen(alarmRfScrn);
+    alarmRfScreen();
+    lv_scr_load(alarmRfScrn);
+}
+
+
+static void alarmRfScreen() {
     alarmRfScrn = lv_obj_create(NULL);
 
     lv_obj_t *onBtn = lv_btn_create(alarmRfScrn);

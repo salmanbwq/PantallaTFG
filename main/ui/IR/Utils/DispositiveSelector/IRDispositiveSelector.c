@@ -12,10 +12,10 @@
 #include <ui/IR/Utils/Enums.h>
 static const char *TAG = "IRDispositiveSelector";
 
-IRDeviceType getIRType(const char *command) {
-    if (strcmp(command, "TV") == 0) return TV;
-    if (strcmp(command, "A/C") == 0) return A_C;
-    if (strcmp(command, "Lamp") == 0) return LAMP;
+IRDeviceType getIRType(const char *deviceName) {
+    if (strcmp(deviceName, "TV") == 0) return TV;
+    if (strcmp(deviceName, "A/C") == 0) return A_C;
+    if (strcmp(deviceName, "Lamp") == 0) return LAMP;
     return UNKNOWN;
 }
 

@@ -18,7 +18,7 @@ static lv_obj_t *addRFIDInstance;
 
 static lv_obj_t *keyboard;
 
-void goToAddRfidScreen(lv_event_t *event) {
+void goToAddRfidScreen() {
     deletePreviousScreen(addRFIDInstance);
     ESP_LOGI("AddRfidScreen", "Going to AddRfidScreen");
     addrfiddispScreen();
