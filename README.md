@@ -22,4 +22,4 @@ This repository contains code for remote controller lcd.
 - 📘 Lvgl documentation [ESP-IDF Doc](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/index.html).
 
 ## 📝 License 
-This project includes code from the [esp32-2432S028R](https://github.com/limpens/esp32-2432S028R) repository by limpens, which is licensed under the Apache [License](https://github.com/salmanbwq/PantallaTFG/blob/main/LICENSE)
+This project includes code from the [esp32-2432S028R](https://github.com/limpens/esp32-2432S028R) repository by limpens, which is licensed under the MIT [License](https://github.com/salmanbwq/PantallaTFG/blob/main/LICENSE)
