@@ -19,3 +19,4 @@ This repository contains code for remote controller lcd.
 
 - 🖥️ Original repository LCD code [esp32-2432S028R](https://github.com/limpens/esp32-2432S028R) 
 - 📘 Lvgl documentation [LVGL Doc](https://lvgl.io/).
+- 📘 Lvgl documentation [ESP-IDF Doc](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/index.html).
