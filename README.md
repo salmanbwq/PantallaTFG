@@ -7,7 +7,7 @@
 
 This repository contains code for remote controller lcd.
 
-## 📌 Characteristics
+## Characteristics
 
 - 📟 **Lcd:** Sunton ESP32-2432S028R (240x320 TFT con touchscreen)
 - 🖥️ **MCU:** ESP32
@@ -20,3 +20,6 @@ This repository contains code for remote controller lcd.
 - 🖥️ Original repository LCD code [esp32-2432S028R](https://github.com/limpens/esp32-2432S028R) 
 - 📘 Lvgl documentation [LVGL Doc](https://lvgl.io/).
 - 📘 Lvgl documentation [ESP-IDF Doc](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/index.html).
+
+## 📝 License 
+This project includes code from the [esp32-2432S028R](https://github.com/limpens/esp32-2432S028R) repository by limpens, which is licensed under the MIT [License](https://github.com/salmanbwq/PantallaTFG/blob/main/LICENSE)
