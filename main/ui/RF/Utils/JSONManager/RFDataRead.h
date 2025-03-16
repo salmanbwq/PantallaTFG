@@ -8,6 +8,8 @@
 
 static char *getGarageCommand(const char *name, const char *commanName, cJSON *json, cJSON *commands);
 
+static char *getAlarmCommand(const char *name, const char *commanName, cJSON *json, cJSON *commands);
+
 static cJSON *getDeviceFromJson(const char *deviceName);
 
 /**

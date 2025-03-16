@@ -19,6 +19,8 @@ esp_err_t updateRFJSON(char *name, const char *commandName, char *content);
 
 static cJSON *createGarageObj();
 
+static cJSON *createAlarmObj();
+
 static cJSON *getJson(const char *name, const char *type, const char *freq);
 
 /**

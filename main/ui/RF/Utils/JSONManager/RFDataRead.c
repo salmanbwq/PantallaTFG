@@ -65,6 +65,24 @@ static char *getGarageCommand(const char *name, const char *commanName, cJSON *j
     return cJSON_GetObjectItemCaseSensitive(command, "content")->valuestring;
 }
 
+static char *getAlarmCommand(const char *name, const char *commanName, cJSON *json, cJSON *commands) {
+    if (commands == NULL) {
+        ESP_LOGE(TAG, "No command exist for %s", name);
+        cJSON_Delete(json);
+        return NULL;
+    }
+    cJSON *command;
+    if (strcmp(commanName, "ON") == 0) {
+        command = cJSON_GetArrayItem(commands, 0);
+    } else if (strcmp(commanName, "OFF") == 0) {
+        command = cJSON_GetArrayItem(commands, 1);
+    } else {
+        ESP_LOGE(TAG, "Comando no existe %s", commanName);
+        return NULL;
+    }
+    return cJSON_GetObjectItemCaseSensitive(command, "content")->valuestring;
+}
+
 char *getCommandsFromJSON(const char *name, const char *commanName) {
     cJSON *json = getDeviceFromJson(name);
     if (json == NULL) {
@@ -82,14 +100,14 @@ char *getCommandsFromJSON(const char *name, const char *commanName) {
             ESP_LOGI(TAG, "Getting garage command %s, for %s ", commanName, name);
             cJSON *commands = cJSON_GetObjectItemCaseSensitive(json, "command");
             return getGarageCommand(name, commanName, json, commands);
+            break;
         case ALARM:
-        case LIGHT:
             ESP_LOGI(TAG, "Getting alarm command %s, for %s ", name, commanName);
+            cJSON *commandsAlarmn = cJSON_GetObjectItemCaseSensitive(json, "command");
+            return getAlarmCommand(name, commanName, json, commandsAlarmn);
             break;
         default: ;
     }
     cJSON_Delete(json);
     return NULL;
 }
-
-

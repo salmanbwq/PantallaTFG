@@ -35,8 +35,21 @@ static cJSON *createGarageObj() {
     return commands_array;
 }
 
-static cJSON *getJson(const char *name, const char *type, const char *freq) {
+static cJSON *createAlarmObj() {
+    cJSON *commands_array = cJSON_CreateArray();
+    cJSON *openCmd = cJSON_CreateObject();
+    cJSON *closeCmd = cJSON_CreateObject();
+    cJSON_AddStringToObject(openCmd, "name", "ON"); // Nombre del comando
+    cJSON_AddStringToObject(openCmd, "content", ""); // Contenido vacío por defecto
+    cJSON_AddStringToObject(closeCmd, "name", "OFF");
+    cJSON_AddStringToObject(closeCmd, "content", "");
+    cJSON_AddItemToArray(commands_array, openCmd);
+    cJSON_AddItemToArray(commands_array, closeCmd);
+    ESP_LOGI(TAG, "Garage objects created");
+    return commands_array;
+}
 
+static cJSON *getJson(const char *name, const char *type, const char *freq) {
     cJSON *json = cJSON_CreateObject();
     cJSON_AddStringToObject(json, "name", name);
     cJSON_AddStringToObject(json, "freq", freq);
@@ -50,12 +63,7 @@ static cJSON *getJson(const char *name, const char *type, const char *freq) {
 
         case ALARM:
             ESP_LOGI(TAG, "Creating new Alarm Dispositive");
-            cJSON_AddBoolToObject(json, "state", false);
-            break;
-
-        case LIGHT:
-            ESP_LOGI(TAG, "Creating new Light Dispositive");
-            cJSON_AddBoolToObject(json, "state", false);
+            cJSON_AddItemToObject(json, "command", createAlarmObj());
             break;
 
         default: ESP_LOGE(TAG, "Unknown type");
@@ -147,4 +155,3 @@ esp_err_t updateRFJSON(char *name, const char *commandName, char *content) {
 
     return ESP_FAIL;
 }
-

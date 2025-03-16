@@ -16,15 +16,13 @@ static const char *TAG = "DispositiveSelector";
 
 InstanceType get_command_type(const char *command) {
     if (strcmp(command, "Garage") == 0) return Garage;
-    if (strcmp(command, "alarm") == 0) return ALARM;
+    if (strcmp(command, "Alarm") == 0) return ALARM;
     return UNKNOWN_COMMAND;
 }
 
 
-
-
 void changeToRFDeviceTypeScreen(const char *deviceType, const char *selectedText,
-                              const DispositiveSelectorType type) {
+                                const DispositiveSelectorType type) {
     switch (get_command_type(deviceType)) {
         case Garage:
             ESP_LOGI(TAG, "Se ha seleccionado: %s", deviceType);
@@ -32,7 +30,7 @@ void changeToRFDeviceTypeScreen(const char *deviceType, const char *selectedText
             break;
         case ALARM:
             ESP_LOGI(TAG, "Se ha seleccionado: %s", deviceType);
-            loadAlarmScreen();
+            loadAlarmScreen(selectedText, type);
             break;
         default:
             ESP_LOGI(TAG, "Se ha seleccionado una instancia no valida %s", deviceType);

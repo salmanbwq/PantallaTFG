@@ -58,7 +58,7 @@ static void addrfdispScreen() {
 
     // Dropdown para el tipo de dispositivo
     dd_type = lv_dropdown_create(addRFInstance);
-    lv_dropdown_set_options(dd_type, "Sensor\nGarage\nLamp");
+    lv_dropdown_set_options(dd_type, "Garage\nAlarm");
     lv_obj_set_width(dd_type, 140); // Ajustar ancho
     lv_obj_align(dd_type, LV_ALIGN_TOP_LEFT, 20, 20); // Posición en la esquina superior izquierda
 

@@ -12,7 +12,7 @@
 #include <nvs_flash.h>
 #include <string.h>
 
-#define ESP_CHANNEL 11
+#define ESP_CHANNEL 1
 #define BUFFER_SIZE 256 // Definir tamaño adecuado
 
 static char bufferLectura[BUFFER_SIZE]; // Definir el buffer correctamente
