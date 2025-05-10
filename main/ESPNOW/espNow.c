@@ -48,7 +48,7 @@ void recv_cb(const esp_now_recv_info_t *esp_now_info, const uint8_t *data, int d
     ESP_LOGI("ESP_RECV", "Data recibida" MACSTR "%s", MAC2STR(esp_now_info->src_addr), data);
 }
 
-void send_cb(const uint8_t *mac_addr, esp_now_send_status_t status) {
+void send_cb(const wifi_tx_info_t *info, esp_now_send_status_t status) {
     if (status == ESP_NOW_SEND_SUCCESS) {
         ESP_LOGI("ESP_SEND", "ESP_NOW_SEND_SUCCESS");
         sent = true;

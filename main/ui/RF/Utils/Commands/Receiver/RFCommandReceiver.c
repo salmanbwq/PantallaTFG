@@ -75,7 +75,7 @@ void receiveRFCommand(const char *commandName) {
         return;
     }
 
-    char *commandReceived[50];
+    char commandReceived[50];
     strcpy(commandReceived, getBuffer());
 
     if (updateRFJSON(instanceName, commandName, commandReceived) == ESP_OK) {
