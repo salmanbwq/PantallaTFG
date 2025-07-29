@@ -28,22 +28,18 @@ void mainScreenInit(void) {
     lv_obj_set_style_bg_color(mainInstance, lv_color_hex(0xc5d9db), 0);
 
 
-    // ✅ Establecer fondo blanco
     lv_obj_set_style_bg_opa(mainInstance, LV_OPA_COVER, LV_PART_MAIN);
 
-    // 📌 Crear un contenedor para los botones con diseño de cuadrícula
     lv_obj_t *gridContainer = lv_obj_create(mainInstance);
     lv_obj_set_size(gridContainer, 240, 180); // Aumentamos la altura para más espacio
     lv_obj_center(gridContainer);
     lv_obj_set_style_bg_color(gridContainer, lv_color_hex(0xffffff), 0);
-    // 📌 Configuración de la cuadrícula (2 columnas, 2 filas, más espacio entre botones)
     static lv_coord_t col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(gridContainer, col_dsc, row_dsc);
     lv_obj_set_style_pad_row(gridContainer, 20, 0); // Aumentar espacio entre filas
     lv_obj_set_style_pad_column(gridContainer, 20, 0); // Aumentar espacio entre columnas
 
-    // 📌 Crear un estilo para los botones
     static lv_style_t style_btn;
     lv_style_init(&style_btn);
     lv_style_set_radius(&style_btn, 10);
@@ -53,7 +49,6 @@ void mainScreenInit(void) {
     lv_style_set_border_color(&style_btn, lv_color_hex(0xFFFFFF));
     lv_style_set_shadow_width(&style_btn, 10);
 
-    // 📌 Crear los botones con iconos
     lv_obj_t *btnRF = lv_btn_create(gridContainer);
     lv_obj_add_style(btnRF, &style_btn, 0);
     lv_obj_set_grid_cell(btnRF, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
