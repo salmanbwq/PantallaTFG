@@ -25,7 +25,7 @@ void goToAddRfidScreen() {
     lv_scr_load(addRFIDInstance);
 }
 
-// Función para crear la pantalla de la interfaz gráfica
+
 static void addrfiddispScreen() {
     addRFIDInstance = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(addRFIDInstance, lv_color_hex(0xc5d9db), 0);
@@ -34,7 +34,7 @@ static void addrfiddispScreen() {
     lv_obj_set_size(addRFIDInstance, 320, 240);
     lv_obj_set_style_bg_opa(addRFIDInstance, LV_OPA_COVER, 0);
 
-    // Textarea para ingresar el nombre
+
     lv_obj_t *ta_name = lv_textarea_create(addRFIDInstance);
     lv_textarea_set_placeholder_text(ta_name, "Nombre del dispositivo");
     lv_textarea_set_max_length(ta_name, 10);
@@ -46,7 +46,7 @@ static void addrfiddispScreen() {
     createKeyboard(addRFIDInstance);
 
 
-    // Botón para guardar
+
     lv_obj_t *btn_save = lv_btn_create(addRFIDInstance);
     lv_obj_set_size(btn_save, 80, 30);
     lv_obj_set_style_bg_color(btn_save, lv_color_hex(0x00bb2d), 0);
@@ -61,7 +61,7 @@ static void addrfiddispScreen() {
 
     lv_obj_add_event_cb(btn_save, saveRFIDDispositives, LV_EVENT_CLICKED, widgets);
 
-    // Botón para volver
+
     lv_obj_t *btn_back = lv_btn_create(addRFIDInstance);
     lv_obj_set_size(btn_back, 80, 30);
     lv_obj_set_style_bg_color(btn_back, lv_color_hex(0xff0000), 0);

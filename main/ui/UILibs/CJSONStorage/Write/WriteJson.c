@@ -37,21 +37,21 @@ static void addDevicesListJson(const cJSON *json, const char *FILE_PATH) {
 
 
 void updateDevicesListJson(const cJSON *json, const char *FILE_PATH) {
-    // Leer JSON existente
+
     cJSON *existingJson = readDevices(FILE_PATH);
     if (!existingJson || !cJSON_IsArray(existingJson)) {
         ESP_LOGW(TAG, "No se pudo abrir el archivo JSON o está corrupto, se creará uno nuevo.");
         existingJson = cJSON_CreateArray();
     }
 
-    // Validar que el JSON a agregar sea válido
+
     if (!json || !cJSON_IsObject(json)) {
         ESP_LOGE(TAG, "El nuevo JSON no es válido.");
         cJSON_Delete(existingJson);
         return;
     }
 
-    // Obtener nombre del nuevo dispositivo con verificación
+
     cJSON *nameObj = cJSON_GetObjectItem(json, "name");
     if (!nameObj || !cJSON_IsString(nameObj)) {
         ESP_LOGE(TAG, "El nuevo dispositivo no tiene nombre válido.");
@@ -60,7 +60,7 @@ void updateDevicesListJson(const cJSON *json, const char *FILE_PATH) {
     }
     const char *newDeviceName = nameObj->valuestring;
 
-    // Buscar si el dispositivo ya existe
+
     bool found = false;
     int index = 0;
 
@@ -68,7 +68,6 @@ void updateDevicesListJson(const cJSON *json, const char *FILE_PATH) {
     cJSON_ArrayForEach(device, existingJson) {
         cJSON *name = cJSON_GetObjectItem(device, "name");
         if (name && strcmp(name->valuestring, newDeviceName) == 0) {
-            // Dispositivo encontrado, eliminarlo antes de reemplazarlo
             cJSON_Delete(cJSON_DetachItemFromArray(existingJson, index));
             cJSON_InsertItemInArray(existingJson, index, cJSON_Duplicate(json, 1));
             found = true;
@@ -78,13 +77,13 @@ void updateDevicesListJson(const cJSON *json, const char *FILE_PATH) {
         index++;
     }
 
-    // Si no se encontró, agregarlo
+
     if (!found) {
         ESP_LOGI(TAG, "Dispositivo '%s' no encontrado. Agregando nuevo.", newDeviceName);
         cJSON_AddItemToArray(existingJson, cJSON_Duplicate(json, 1));
     }
 
-    // Guardar JSON actualizado
+
     FILE *file = fopen(FILE_PATH, "w");
     if (!file) {
         ESP_LOGE(TAG, "No se pudo abrir el archivo JSON para escribir.");
@@ -92,7 +91,7 @@ void updateDevicesListJson(const cJSON *json, const char *FILE_PATH) {
         return;
     }
 
-    // Usar `cJSON_PrintUnformatted()` para evitar truncamientos
+
     char *json_str = cJSON_PrintUnformatted(existingJson);
     if (!json_str) {
         ESP_LOGE(TAG, "Error al convertir cJSON a string.");
@@ -141,25 +140,23 @@ void AddDevicesJson(cJSON *new_device, const char *FILE_PATH) {
 
     char *name = cJSON_GetObjectItem(new_device, "name")->valuestring;
 
-    // Verificar si el dispositivo ya existe
     if (deviceExistsInJson(json, name)) {
         ESP_LOGW(TAG, "El dispositivo con nombre '%s' ya existe. No se agregará.", name);
         cJSON_Delete(json);
         return;
     }
 
-    // Obtener un nuevo ID
+
     int new_id = cJSON_GetArraySize(json) + 1;
 
-    // Crear nuevo objeto JSON
+
     cJSON_AddNumberToObject(new_device, "id", new_id);
 
-    // Agregar al JSON
+
     cJSON_AddItemToArray(json, new_device);
 
-    // Guardar cambios
+
     addDevicesListJson(json, FILE_PATH);
-    // cJSON_Delete(json);
 
     ESP_LOGI(TAG, "Nuevo dispositivo agregado: ID %d, Nombre: %s", new_id, name);
 }

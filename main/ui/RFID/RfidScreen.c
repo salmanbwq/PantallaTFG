@@ -23,14 +23,13 @@ void goToRfidScreen() {
 }
 
 static void initRfidScreen(void) {
-    // Create screen2
-    rfidScrn = lv_obj_create(NULL); // Create the second screen
+    rfidScrn = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(rfidScrn, lv_color_hex(0xc5d9db), 0);
     lv_obj_t *sendRFID = lv_btn_create(rfidScrn);
     lv_obj_t *recvRFID = lv_btn_create(rfidScrn);
     lv_obj_t *rtrn = lv_btn_create(rfidScrn);
 
-    lv_obj_set_size(rfidScrn, 320, 240); // Tamaño de la
+    lv_obj_set_size(rfidScrn, 320, 240);
     lv_obj_set_style_bg_opa(rfidScrn, LV_OPA_COVER, 0);
 
     lv_obj_set_size(sendRFID, 150, 50);

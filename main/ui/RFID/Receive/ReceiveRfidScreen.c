@@ -31,7 +31,6 @@ void goToReceiveRfidScreen() {
 
 static void receiveRFIDData(lv_event_t *event) {
     initializeFlags();
-    // Obtener el user data correctamente
     lv_obj_t **userData = lv_event_get_user_data(event);
     if (!userData) {
         ESP_LOGE(TAG, "User data is NULL");
@@ -132,11 +131,11 @@ static void receiveRfidScreen(void) {
     lv_obj_set_size(sendBtn, 70, 30);
 
 
-    // Crear un array para almacenar las cadenas correctamente
+
     lv_obj_t **receiveData = malloc(2 * sizeof(lv_obj_t *));
-    receiveData[0] = ta_name; // Copia segura de la cadena
+    receiveData[0] = ta_name;
     receiveData[1] = ddDisp;
-    // Pasar sendData como parámetro a la función de evento
+
     lv_obj_add_event_cb(sendBtn, receiveRFIDData, LV_EVENT_CLICKED, receiveData);
 
     lv_obj_center(rtrnBtnLbl);

@@ -25,8 +25,8 @@ static cJSON *createGarageObj() {
     cJSON *commands_array = cJSON_CreateArray();
     cJSON *openCmd = cJSON_CreateObject();
     cJSON *closeCmd = cJSON_CreateObject();
-    cJSON_AddStringToObject(openCmd, "name", "Open"); // Nombre del comando
-    cJSON_AddStringToObject(openCmd, "content", ""); // Contenido vacío por defecto
+    cJSON_AddStringToObject(openCmd, "name", "Open");
+    cJSON_AddStringToObject(openCmd, "content", "");
     cJSON_AddStringToObject(closeCmd, "name", "Close");
     cJSON_AddStringToObject(closeCmd, "content", "");
     cJSON_AddItemToArray(commands_array, openCmd);
@@ -39,8 +39,8 @@ static cJSON *createAlarmObj() {
     cJSON *commands_array = cJSON_CreateArray();
     cJSON *openCmd = cJSON_CreateObject();
     cJSON *closeCmd = cJSON_CreateObject();
-    cJSON_AddStringToObject(openCmd, "name", "ON"); // Nombre del comando
-    cJSON_AddStringToObject(openCmd, "content", ""); // Contenido vacío por defecto
+    cJSON_AddStringToObject(openCmd, "name", "ON");
+    cJSON_AddStringToObject(openCmd, "content", "");
     cJSON_AddStringToObject(closeCmd, "name", "OFF");
     cJSON_AddStringToObject(closeCmd, "content", "");
     cJSON_AddItemToArray(commands_array, openCmd);

@@ -21,8 +21,7 @@ void goToIRScreen() {
 }
 
 static void irScreen() {
-    // Create screen2
-    irScrn = lv_obj_create(NULL); // Create the second screen
+    irScrn = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(irScrn, lv_color_hex(0xc5d9db), 0);
 
     lv_obj_t *sendIR = lv_btn_create(irScrn);

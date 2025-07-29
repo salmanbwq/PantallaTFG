@@ -8,12 +8,12 @@ static bool loading_done = false;
 
 static void closeLoadingPopup(void) {
     if (loading_timer) {
-        lv_timer_del(loading_timer); // Eliminar el temporizador
+        lv_timer_del(loading_timer);
         loading_timer = NULL;
     }
 
     if (loading_popup) {
-        lv_obj_del(loading_popup); // Eliminar el popup
+        lv_obj_del(loading_popup);
         loading_popup = NULL;
     }
 }
@@ -33,18 +33,18 @@ void showLoadingPopup(lv_obj_t *parent) {
 
     loading_done = false;
 
-    // Crear un contenedor para el popup
+
     loading_popup = lv_obj_create(parent);
     lv_obj_set_size(loading_popup, 200, 100);
     lv_obj_align(loading_popup, LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_style_bg_color(loading_popup, lv_color_hex(0xffffff), LV_PART_MAIN);
     lv_obj_set_style_radius(loading_popup, 50, LV_PART_MAIN);
 
-    // Crear un spinner animado
+
     lv_obj_t *spinner = lv_spinner_create(loading_popup);
     lv_obj_set_size(spinner, 50, 50);
     lv_obj_align(spinner, LV_ALIGN_CENTER, 0, 0);
-    // Crear un temporizador para verificar el estado de carga
+
     loading_timer = lv_timer_create(checkLoadingStatus, 500, NULL);
 }
 

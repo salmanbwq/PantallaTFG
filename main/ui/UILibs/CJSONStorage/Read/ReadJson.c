@@ -40,14 +40,13 @@ cJSON *readDevices(const char *FILE_PATH) {
     fclose(file);
 
     cJSON *json = cJSON_Parse(buffer);
-    free(buffer); // Liberar buffer después de parsear
-
+    free(buffer);
     if (!json) {
         ESP_LOGE(TAG, "Error al parsear JSON.");
         return cJSON_CreateArray();
     }
 
-    return json; // ¡Ojo! Quien llame a esta función debe liberar `json` con `cJSON_Delete()`
+    return json;
 }
 
 void populateDropdownNames(lv_obj_t *dropdw, const char *FILE_PATH) {
@@ -81,7 +80,7 @@ void populateDropdownNames(lv_obj_t *dropdw, const char *FILE_PATH) {
         lv_dropdown_add_option(dropdw, device_name, i);
     }
 
-    cJSON_Delete(json); // Liberar memoria correctamente
+    cJSON_Delete(json);
     ESP_LOGI(TAG, "Dropdown actualizado con %d dispositivos.", count);
 }
 
@@ -101,18 +100,18 @@ cJSON *getJsonByName(const char *name, const char *FILE_PATH) {
 
         if (cJSON_IsString(nameItem) && strcmp(nameItem->valuestring, name) == 0) {
 
-            deviceCopy = cJSON_Duplicate(device, 1); // Clonar el objeto antes de liberar el JSON
+            deviceCopy = cJSON_Duplicate(device, 1);
             break;
         }
     }
 
-    cJSON_Delete(json); // Liberar el JSON original
+    cJSON_Delete(json);
 
     if (!deviceCopy) {
         ESP_LOGE(TAG, "Json for %s not found", name);
     }
 
-    return deviceCopy; // Retorna el JSON del dispositivo encontrado (debe liberarse con `cJSON_Delete()`)
+    return deviceCopy;
 }
 
 
@@ -123,7 +122,7 @@ void print_json_from_spiffs(const char *file_path) {
         return;
     }
 
-    // Obtener el tamaño del archivo
+
     fseek(file, 0, SEEK_END);
     long fileSize = ftell(file);
     rewind(file);
@@ -134,7 +133,7 @@ void print_json_from_spiffs(const char *file_path) {
         return;
     }
 
-    // Asignar memoria dinámica para leer el archivo completo
+
     char *buffer = (char *) malloc(fileSize + 1);
     if (!buffer) {
         ESP_LOGE("SPIFFS", "No se pudo asignar memoria para leer el JSON.");
@@ -149,6 +148,6 @@ void print_json_from_spiffs(const char *file_path) {
 
     ESP_LOGI("SPIFFS", "Contenido del JSON:\n%s", buffer);
 
-    free(buffer); // Liberar memoria después de usarla
+    free(buffer);
 }
 

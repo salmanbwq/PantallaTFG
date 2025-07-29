@@ -37,10 +37,9 @@ esp_err_t init_wifi(void) {
     esp_wifi_set_mode(WIFI_MODE_STA);
     esp_wifi_start();
 
-    // 🔥 CAMBIAR CANAL A 11
     ESP_ERROR_CHECK(esp_wifi_set_channel(ESP_CHANNEL, WIFI_SECOND_CHAN_NONE));
 
-    ESP_LOGI("WIFI_INIT", "📡 WiFi inicializado en canal 11");
+    ESP_LOGI("WIFI_INIT", " WiFi inicializado");
     return ESP_OK;
 }
 

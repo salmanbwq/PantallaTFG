@@ -31,14 +31,14 @@ void mainScreenInit(void) {
     lv_obj_set_style_bg_opa(mainInstance, LV_OPA_COVER, LV_PART_MAIN);
 
     lv_obj_t *gridContainer = lv_obj_create(mainInstance);
-    lv_obj_set_size(gridContainer, 240, 180); // Aumentamos la altura para más espacio
+    lv_obj_set_size(gridContainer, 240, 180);
     lv_obj_center(gridContainer);
     lv_obj_set_style_bg_color(gridContainer, lv_color_hex(0xffffff), 0);
     static lv_coord_t col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(gridContainer, col_dsc, row_dsc);
-    lv_obj_set_style_pad_row(gridContainer, 20, 0); // Aumentar espacio entre filas
-    lv_obj_set_style_pad_column(gridContainer, 20, 0); // Aumentar espacio entre columnas
+    lv_obj_set_style_pad_row(gridContainer, 20, 0);
+    lv_obj_set_style_pad_column(gridContainer, 20, 0);
 
     static lv_style_t style_btn;
     lv_style_init(&style_btn);

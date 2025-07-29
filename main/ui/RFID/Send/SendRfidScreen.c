@@ -43,14 +43,14 @@ static void textAreaHandlerRFID(lv_event_t *e) {
     lv_event_code_t code = lv_event_get_code(e);
 
     if (code == LV_EVENT_FOCUSED) {
-        lv_obj_clear_flag(keyboard, LV_OBJ_FLAG_HIDDEN); // Mostrar teclado
+        lv_obj_clear_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
         lv_keyboard_set_textarea(keyboard, textEntrance);
 
         lv_obj_add_flag(checkBox, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(labelOpt1, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(labelOpt2, LV_OBJ_FLAG_HIDDEN);
     } else if (code == LV_EVENT_DEFOCUSED) {
-        lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN); // Ocultar teclado
+        lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
         lv_keyboard_set_textarea(keyboard, NULL);
         lv_obj_clear_flag(checkBox, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(labelOpt1, LV_OBJ_FLAG_HIDDEN);
@@ -94,8 +94,6 @@ static void onSwitchChange(lv_event_t *event) {
 
 
 static void onRFIDSendAction() {
-    //ESP_LOGI(TAG, "New send action triggered!");
-    // Aquí puedes agregar la nueva funcionalidad deseada
     if (lv_obj_has_state(checkBox, LV_STATE_CHECKED)) {
         if (strcmp(lv_textarea_get_text(textEntrance), "") == 0) {
             ESP_LOGI(TAG, "Command to send is empty");

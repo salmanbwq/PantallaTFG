@@ -37,7 +37,7 @@ void app_main(void) {
         esp_restart();
     }
 
-    ESP_ERROR_CHECK(touch_initilization(&tp));
+    ESP_ERROR_CHECK(touch_initialization(&tp));
     touch_cfg.disp = lvgl_display;
     touch_cfg.handle = tp;
     lvgl_port_add_touch(&touch_cfg);

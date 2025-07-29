@@ -12,15 +12,13 @@ void textAreaHandler(lv_event_t *e) {
     lv_obj_t *ta = lv_event_get_target(e);
 
     if (code == LV_EVENT_FOCUSED) {
-        lv_obj_clear_flag(keyboard, LV_OBJ_FLAG_HIDDEN); // Mostrar teclado
+        lv_obj_clear_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
         lv_keyboard_set_textarea(keyboard, ta);
 
-        // Mover el cuadro de texto hacia arriba para que no lo tape el teclado
     } else if (code == LV_EVENT_DEFOCUSED) {
-        lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN); // Ocultar teclado
+        lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
         lv_keyboard_set_textarea(keyboard, NULL);
 
-        // Restaurar la posición original del cuadro de texto
     }
 }
 

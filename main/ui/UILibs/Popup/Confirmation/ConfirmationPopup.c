@@ -7,30 +7,30 @@
 
 
 static void onOkClicked(lv_event_t *e) {
-    lv_obj_t *btn = lv_event_get_target(e); // Obtener el botón "Aceptar"
-    lv_obj_t *popup = lv_obj_get_parent(btn); // Obtener el popup
+    lv_obj_t *btn = lv_event_get_target(e);
+    lv_obj_t *popup = lv_obj_get_parent(btn);
 
-    // Verificar que los objetos existen antes de eliminarlos
+
     if (popup) {
-        lv_obj_del(popup); // Eliminar el popup completo
+        lv_obj_del(popup);
     }
 }
 
 
 void showConfirmationPopup(lv_obj_t *parent, const char *message) {
-    // Crear un contenedor para el popup
+
     lv_obj_t *popup = lv_obj_create(parent);
     lv_obj_set_size(popup, 200, 100);
-    lv_obj_align(popup, LV_ALIGN_CENTER, 0, 0); // Centrar en la pantalla
+    lv_obj_align(popup, LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_style_bg_color(popup, lv_color_hex(0xffffff), 0);
     lv_obj_set_style_radius(popup, 10, 0);
 
-    // Agregar un mensaje en el popup
+
     lv_obj_t *label = lv_label_create(popup);
     lv_label_set_text(label, message);
     lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 10);
 
-    // Botón para cerrar el popup
+
     lv_obj_t *btn_ok = lv_btn_create(popup);
     lv_obj_set_size(btn_ok, 80, 30);
     lv_obj_align(btn_ok, LV_ALIGN_BOTTOM_MID, 0, -10);
@@ -40,6 +40,6 @@ void showConfirmationPopup(lv_obj_t *parent, const char *message) {
     lv_label_set_text(label_ok, "Aceptar");
     lv_obj_center(label_ok);
 
-    // Evento para cerrar la ventana emergente al presionar "Aceptar"
+
     lv_obj_add_event_cb(btn_ok, onOkClicked, LV_EVENT_CLICKED, NULL);
 }

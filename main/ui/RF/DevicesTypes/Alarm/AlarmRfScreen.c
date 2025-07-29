@@ -113,7 +113,7 @@ static void alarmRfScreen(const char *name, const DispositiveSelectorType type) 
     lv_obj_set_style_text_color(rtrnBtnLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
     lv_obj_center(rtrnBtnLabel);
 
-    /* Evento del botón RETURN */
+
     lv_obj_add_event_cb(rtrnBtn, goToSendRfScreen, LV_EVENT_CLICKED, NULL);
 
     switch (type) {
@@ -126,7 +126,6 @@ static void alarmRfScreen(const char *name, const DispositiveSelectorType type) 
         lv_obj_add_event_cb(rtrnBtn, goToSendRfScreen, LV_EVENT_CLICKED, NULL);
         break;
         case RECEIVER:
-            // Changer callbacks to receiver
                 ESP_LOGI(TAG, "RECEIVER");
         initializeRFReceiver(instanceName, alarmRfScrn);
         lv_obj_add_event_cb(onBtn, alarmReceiveCommandRF, LV_EVENT_CLICKED, &open);

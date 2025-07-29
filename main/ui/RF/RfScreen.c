@@ -23,8 +23,7 @@ void goToRfScreen() {
 
 
 static void rfScreenInit(void) {
-    // Create screen2
-    rfScrn = lv_obj_create(NULL); // Create the second screen
+    rfScrn = lv_obj_create(NULL);
     lv_obj_t *sendRF = lv_btn_create(rfScrn);
     lv_obj_t *recvRF = lv_btn_create(rfScrn);
     lv_obj_t *rtrn = lv_btn_create(rfScrn);

@@ -17,16 +17,20 @@
 #include <driver/gpio.h>
 #include <driver/ledc.h>
 #include <driver/spi_master.h>
+
+#ifdef CYD_ILI9341
 #include <esp_lcd_ili9341.h>
+#endif
 
 #include <lvgl.h>
 #include <esp_lvgl_port.h>
 
 #include "hardware.h"
 
-static const char *TAG = "lcd";
+static const char *TAG="lcd";
 
-esp_err_t lcd_display_brightness_init(void) {
+esp_err_t lcd_display_brightness_init(void)
+{
     const ledc_channel_config_t LCD_backlight_channel = {
         .gpio_num = LCD_BACKLIGHT,
         .speed_mode = LEDC_LOW_SPEED_MODE,
@@ -52,7 +56,8 @@ esp_err_t lcd_display_brightness_init(void) {
     return ESP_OK;
 }
 
-esp_err_t lcd_display_brightness_set(int brightness_percent) {
+esp_err_t lcd_display_brightness_set(int brightness_percent)
+{
     if (brightness_percent > 100) {
         brightness_percent = 100;
     }
@@ -70,16 +75,20 @@ esp_err_t lcd_display_brightness_set(int brightness_percent) {
     return ESP_OK;
 }
 
-esp_err_t lcd_display_backlight_off(void) {
+esp_err_t lcd_display_backlight_off(void)
+{
     return lcd_display_brightness_set(0);
 }
 
-esp_err_t lcd_display_backlight_on(void) {
+esp_err_t lcd_display_backlight_on(void)
+{
     return lcd_display_brightness_set(100);
 }
 
-esp_err_t lcd_display_rotate(lv_display_t *lvgl_disp, lv_display_rotation_t dir) {
-    if (lvgl_disp) {
+esp_err_t lcd_display_rotate(lv_display_t *lvgl_disp, lv_display_rotation_t dir)
+{
+    if (lvgl_disp)
+    {
         lv_display_set_rotation(lvgl_disp, dir);
         return ESP_OK;
     }
@@ -87,7 +96,8 @@ esp_err_t lcd_display_rotate(lv_display_t *lvgl_disp, lv_display_rotation_t dir)
     return ESP_FAIL;
 }
 
-esp_err_t app_lcd_init(esp_lcd_panel_io_handle_t *lcd_io, esp_lcd_panel_handle_t *lcd_panel) {
+esp_err_t app_lcd_init(esp_lcd_panel_io_handle_t *lcd_io, esp_lcd_panel_handle_t *lcd_panel)
+{
     const spi_bus_config_t buscfg = {
         .mosi_io_num = LCD_SPI_MOSI,
         .miso_io_num = LCD_SPI_MISO,
@@ -110,17 +120,25 @@ esp_err_t app_lcd_init(esp_lcd_panel_io_handle_t *lcd_io, esp_lcd_panel_handle_t
         .lcd_param_bits = LCD_PARAM_BITS,
     };
 
-    ESP_RETURN_ON_ERROR(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)LCD_SPI_HOST, &io_config, lcd_io), TAG,
-                        "LCD new panel io failed");
+    ESP_RETURN_ON_ERROR(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)LCD_SPI_HOST, &io_config, lcd_io), TAG, "LCD new panel io failed");
 
 
     const esp_lcd_panel_dev_config_t panel_config = {
         .reset_gpio_num = LCD_RESET,
+        #ifdef CYD_ILI9341
         .color_space = ESP_LCD_COLOR_SPACE_BGR,
+        #else
+        .color_space = ESP_LCD_COLOR_SPACE_RGB,
+        #endif
         .bits_per_pixel = LCD_BITS_PIXEL,
     };
 
+    #ifdef CYD_ILI9341
     esp_err_t r = esp_lcd_new_panel_ili9341(*lcd_io, &panel_config, lcd_panel);
+    #else
+    esp_err_t r = esp_lcd_new_panel_st7789(*lcd_io, &panel_config, lcd_panel);
+    #endif
+
 
     esp_lcd_panel_reset(*lcd_panel);
     esp_lcd_panel_init(*lcd_panel);
@@ -132,10 +150,11 @@ esp_err_t app_lcd_init(esp_lcd_panel_io_handle_t *lcd_io, esp_lcd_panel_handle_t
 }
 
 
-lv_display_t *app_lvgl_init(esp_lcd_panel_io_handle_t lcd_io, esp_lcd_panel_handle_t lcd_panel) {
+lv_display_t *app_lvgl_init(esp_lcd_panel_io_handle_t lcd_io, esp_lcd_panel_handle_t lcd_panel)
+{
     const lvgl_port_cfg_t lvgl_cfg = {
         .task_priority = 4,
-        .task_stack = 8192,
+        .task_stack = 4096,
         .task_affinity = -1,
         .task_max_sleep_ms = 500,
         .timer_period_ms = 5
@@ -143,7 +162,8 @@ lv_display_t *app_lvgl_init(esp_lcd_panel_io_handle_t lcd_io, esp_lcd_panel_hand
 
     esp_err_t e = lvgl_port_init(&lvgl_cfg);
 
-    if (e != ESP_OK) {
+    if (e != ESP_OK)
+    {
         ESP_LOGI(TAG, "lvgl_port_init() failed: %s", esp_err_to_name(e));
 
         return NULL;
